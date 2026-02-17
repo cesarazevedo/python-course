@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aula 3.4 - Variáveis String</title>
+    <link rel="stylesheet" href="slide-mode.css">
+    <style>
+        :root { --primary: #306998; --secondary: #FFD43B; --bg-light: #f4f7fe; --text-dark: #2d3748; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-light); color: var(--text-dark); line-height: 1.7; }
+        .top-bar { background: white; padding: 15px 30px; display: flex; align-items: center; gap: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 10; }
+        .back-btn { text-decoration: none; color: var(--primary); font-weight: 600; display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; transition: background 0.3s; }
+        .back-btn:hover { background: rgba(48,105,152,0.08); }
+        .page-badge { font-size: 0.8em; padding: 4px 12px; border-radius: 20px; background: rgba(230,57,70,0.12); color: #c1121f; font-weight: 600; }
+        .content-wrapper { max-width: 800px; margin: 40px auto; padding: 0 30px; }
+        .lesson-hero { background: white; border-radius: 16px; padding: 40px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        .lesson-hero h1 { font-size: 2em; margin-bottom: 10px; color: var(--primary); }
+        .lesson-hero .subtitle { font-size: 1.1em; color: #718096; }
+        .content-card { background: white; border-radius: 16px; padding: 35px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 25px; }
+        .content-card h2 { font-size: 1.4em; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .content-card p { margin-bottom: 15px; text-align: justify; }
+        .highlight-box { background: linear-gradient(135deg, rgba(48,105,152,0.05), rgba(255,212,59,0.1)); border-left: 4px solid var(--secondary); padding: 20px 25px; border-radius: 0 12px 12px 0; margin: 20px 0; }
+        .highlight-box p { margin-bottom: 0; font-style: italic; }
+        .code-block { background: #1e293b; color: #e2e8f0; padding: 20px 25px; border-radius: 12px; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.95em; margin: 15px 0; overflow-x: auto; position: relative; }
+        .code-block .code-label { position: absolute; top: 8px; right: 12px; font-size: 0.75em; color: #64748b; font-family: 'Segoe UI', sans-serif; }
+        .code-block .prompt { color: #93c5fd; }
+        .code-block .output { color: #fbbf24; }
+        .code-block .string { color: #86efac; }
+        .code-block .comment { color: #64748b; font-style: italic; }
+        .string-visual { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 20px; margin: 15px 0; text-align: center; overflow-x: auto; }
+        .string-visual .boxes { display: inline-flex; gap: 0; }
+        .string-visual .box { width: 40px; height: 45px; border: 2px solid var(--primary); display: flex; align-items: center; justify-content: center; font-family: 'Consolas', monospace; font-size: 1.1em; font-weight: 600; background: white; }
+        .string-visual .indices { display: inline-flex; gap: 0; margin-top: 5px; }
+        .string-visual .idx { width: 40px; text-align: center; font-size: 0.8em; color: #718096; }
+        .op-table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+        .op-table th, .op-table td { padding: 10px 14px; text-align: center; border-bottom: 1px solid #e2e8f0; }
+        .op-table th { background: #f8fafc; color: var(--primary); font-weight: 600; }
+        .op-table td:first-child { font-family: 'Consolas', monospace; }
+        .nav-footer { display: flex; justify-content: space-between; margin-top: 40px; padding-bottom: 40px; }
+        .nav-link { text-decoration: none; color: var(--primary); font-weight: 600; padding: 12px 24px; border-radius: 10px; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: all 0.3s; }
+        .nav-link:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        ul, ol { margin: 10px 0 15px 25px; } li { margin-bottom: 8px; }
+        @media (max-width: 768px) { .content-wrapper { padding: 0 15px; } .lesson-hero, .content-card { padding: 25px; } .lesson-hero h1 { font-size: 1.5em; } }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <a href="index.html" class="back-btn">&#x2B05; Voltar ao Dashboard</a>
+        <span class="page-badge">Cap&iacute;tulo 3 &mdash; Vari&aacute;veis e Entrada</span>
+        <button class="slide-toggle" id="slideToggleBtn">&#x1F4FA; Modo Slide</button>
+    </div>
+    <div class="content-wrapper">
+        <div class="lesson-hero">
+            <h1>&#x1F521; Vari&aacute;veis String</h1>
+            <p class="subtitle">Se&ccedil;&atilde;o 3.4 &mdash; Textos, &iacute;ndices, concatena&ccedil;&atilde;o, composi&ccedil;&atilde;o e fatiamento</p>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x1F4DD; O que s&atilde;o strings?</h2>
+            <p>Strings armazenam <strong>cadeias de caracteres</strong>: letras, n&uacute;meros, s&iacute;mbolos, espa&ccedil;os. Imagine como uma sequ&ecirc;ncia de blocos, onde cada caractere ocupa uma posi&ccedil;&atilde;o:</p>
+            <div class="string-visual">
+                <div class="boxes">
+                    <div class="box">J</div><div class="box">o</div><div class="box">&atilde;</div><div class="box">o</div><div class="box"> </div><div class="box">e</div><div class="box"> </div><div class="box">M</div><div class="box">a</div><div class="box">r</div><div class="box">i</div><div class="box">a</div>
+                </div>
+                <div class="indices">
+                    <div class="idx">0</div><div class="idx">1</div><div class="idx">2</div><div class="idx">3</div><div class="idx">4</div><div class="idx">5</div><div class="idx">6</div><div class="idx">7</div><div class="idx">8</div><div class="idx">9</div><div class="idx">10</div><div class="idx">11</div>
+                </div>
+            </div>
+            <p>Os &iacute;ndices come&ccedil;am em <strong>0</strong>, n&atilde;o em 1! A fun&ccedil;&atilde;o <code>len()</code> retorna o tamanho:</p>
+            <div class="code-block">
+                <span class="code-label">len()</span>
+<span class="prompt">&gt;&gt;&gt;</span> print(len(<span class="string">"A"</span>))
+<span class="output">1</span>
+<span class="prompt">&gt;&gt;&gt;</span> print(len(<span class="string">"AB"</span>))
+<span class="output">2</span>
+<span class="prompt">&gt;&gt;&gt;</span> print(len(<span class="string">""</span>))      <span class="comment"># string vazia</span>
+<span class="output">0</span>
+<span class="prompt">&gt;&gt;&gt;</span> print(len(<span class="string">"O rato roeu a roupa"</span>))
+<span class="output">19</span>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x1F517; Concatena&ccedil;&atilde;o e repeti&ccedil;&atilde;o</h2>
+            <p>Use <code>+</code> para juntar strings e <code>*</code> para repetir:</p>
+            <div class="code-block">
+                <span class="code-label">Listagem 3.9</span>
+<span class="prompt">&gt;&gt;&gt;</span> s = <span class="string">"ABC"</span>
+<span class="prompt">&gt;&gt;&gt;</span> print(s + <span class="string">"C"</span>)
+<span class="output">ABCC</span>
+<span class="prompt">&gt;&gt;&gt;</span> print(s + <span class="string">"D"</span> * 4)
+<span class="output">ABCDDDD</span>
+<span class="prompt">&gt;&gt;&gt;</span> print(<span class="string">"X"</span> + <span class="string">"-"</span> * 10 + <span class="string">"X"</span>)
+<span class="output">X----------X</span>
+<span class="prompt">&gt;&gt;&gt;</span> print(<span class="string">"A"</span> * 3)
+<span class="output">AAA</span>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x1F3A8; Composi&ccedil;&atilde;o com %</h2>
+            <p>Para montar mensagens com vari&aacute;veis, usamos <strong>marcadores de posi&ccedil;&atilde;o</strong>:</p>
+            <table class="op-table">
+                <thead><tr><th>Marcador</th><th>Tipo</th></tr></thead>
+                <tbody>
+                    <tr><td>%d</td><td>N&uacute;meros inteiros</td></tr>
+                    <tr><td>%s</td><td>Strings (textos)</td></tr>
+                    <tr><td>%f</td><td>N&uacute;meros decimais</td></tr>
+                </tbody>
+            </table>
+            <div class="code-block">
+                <span class="code-label">Listagem 3.12</span>
+<span class="prompt">&gt;&gt;&gt;</span> nome = <span class="string">"Jo&atilde;o"</span>
+<span class="prompt">&gt;&gt;&gt;</span> idade = 22
+<span class="prompt">&gt;&gt;&gt;</span> grana = 51.34
+<span class="prompt">&gt;&gt;&gt;</span> print(<span class="string">"%s tem %d anos e R$%5.2f no bolso."</span> % (nome, idade, grana))
+<span class="output">Jo&atilde;o tem 22 anos e R$51.34 no bolso.</span>
+            </div>
+            <p>O <code>%5.2f</code> significa: reserve 5 posi&ccedil;&otilde;es, com 2 casas decimais. Muito &uacute;til para valores monet&aacute;rios!</p>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x2702; Fatiamento (slicing)</h2>
+            <p>Extraia peda&ccedil;os de uma string usando <code>[in&iacute;cio:fim]</code>. O caractere na posi&ccedil;&atilde;o <code>fim</code> <strong>n&atilde;o &eacute; inclu&iacute;do</strong>:</p>
+            <div class="code-block">
+                <span class="code-label">Listagem 3.13-3.14</span>
+<span class="prompt">&gt;&gt;&gt;</span> s = <span class="string">"ABCDEFGHI"</span>
+<span class="prompt">&gt;&gt;&gt;</span> print(s[0:2])     <span class="comment"># posi&ccedil;&otilde;es 0 e 1</span>
+<span class="output">AB</span>
+<span class="prompt">&gt;&gt;&gt;</span> print(s[2:4])     <span class="comment"># posi&ccedil;&otilde;es 2 e 3</span>
+<span class="output">CD</span>
+<span class="prompt">&gt;&gt;&gt;</span> print(s[:2])      <span class="comment"># do in&iacute;cio at&eacute; 2</span>
+<span class="output">AB</span>
+<span class="prompt">&gt;&gt;&gt;</span> print(s[1:])      <span class="comment"># de 1 at&eacute; o fim</span>
+<span class="output">BCDEFGHI</span>
+<span class="prompt">&gt;&gt;&gt;</span> print(s[:])       <span class="comment"># c&oacute;pia completa</span>
+<span class="output">ABCDEFGHI</span>
+<span class="prompt">&gt;&gt;&gt;</span> print(s[-1:])     <span class="comment"># &uacute;ltimo caractere</span>
+<span class="output">I</span>
+<span class="prompt">&gt;&gt;&gt;</span> print(s[-5:7])    <span class="comment"># &iacute;ndices negativos!</span>
+<span class="output">EFG</span>
+            </div>
+            <div class="highlight-box">
+                <p>&#x1F4A1; &Iacute;ndices negativos contam de tr&aacute;s para frente: <code>-1</code> &eacute; o &uacute;ltimo, <code>-2</code> o pen&uacute;ltimo, etc.</p>
+            </div>
+        </div>
+
+        <div class="nav-footer">
+            <a href="cap3-03-operadores-logicos.html" class="nav-link">&#x2B05; Anterior</a>
+            <a href="cap3-05-sequencias-rastreamento.html" class="nav-link">Pr&oacute;xima: Sequ&ecirc;ncias &#x27A1;</a>
+        </div>
+    </div>
+    <script src="slide-mode.js"></script>
+</body>
+</html>

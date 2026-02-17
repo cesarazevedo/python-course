@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aula 3.1 - Nomes de Variáveis e Tipos Numéricos</title>
+    <link rel="stylesheet" href="slide-mode.css">
+    <style>
+        :root { --primary: #306998; --secondary: #FFD43B; --bg-light: #f4f7fe; --text-dark: #2d3748; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-light); color: var(--text-dark); line-height: 1.7; }
+        .top-bar { background: white; padding: 15px 30px; display: flex; align-items: center; gap: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 10; }
+        .back-btn { text-decoration: none; color: var(--primary); font-weight: 600; display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; transition: background 0.3s; }
+        .back-btn:hover { background: rgba(48,105,152,0.08); }
+        .page-badge { font-size: 0.8em; padding: 4px 12px; border-radius: 20px; background: rgba(230,57,70,0.12); color: #c1121f; font-weight: 600; }
+        .content-wrapper { max-width: 800px; margin: 40px auto; padding: 0 30px; }
+        .lesson-hero { background: white; border-radius: 16px; padding: 40px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        .lesson-hero h1 { font-size: 2em; margin-bottom: 10px; color: var(--primary); }
+        .lesson-hero .subtitle { font-size: 1.1em; color: #718096; }
+        .content-card { background: white; border-radius: 16px; padding: 35px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 25px; }
+        .content-card h2 { font-size: 1.4em; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .content-card p { margin-bottom: 15px; text-align: justify; }
+        .highlight-box { background: linear-gradient(135deg, rgba(48,105,152,0.05), rgba(255,212,59,0.1)); border-left: 4px solid var(--secondary); padding: 20px 25px; border-radius: 0 12px 12px 0; margin: 20px 0; }
+        .highlight-box p { margin-bottom: 0; font-style: italic; }
+        .code-block { background: #1e293b; color: #e2e8f0; padding: 20px 25px; border-radius: 12px; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.95em; margin: 15px 0; overflow-x: auto; position: relative; }
+        .code-block .code-label { position: absolute; top: 8px; right: 12px; font-size: 0.75em; color: #64748b; font-family: 'Segoe UI', sans-serif; }
+        .code-block .prompt { color: #93c5fd; }
+        .code-block .output { color: #fbbf24; }
+        .code-block .comment { color: #64748b; font-style: italic; }
+        .op-table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+        .op-table th, .op-table td { padding: 10px 14px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+        .op-table th { background: #f8fafc; color: var(--primary); font-weight: 600; }
+        .op-table .valid { color: #38b000; font-weight: 600; }
+        .op-table .invalid { color: #e53e3e; font-weight: 600; }
+        .nav-footer { display: flex; justify-content: space-between; margin-top: 40px; padding-bottom: 40px; }
+        .nav-link { text-decoration: none; color: var(--primary); font-weight: 600; padding: 12px 24px; border-radius: 10px; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: all 0.3s; }
+        .nav-link:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        ul, ol { margin: 10px 0 15px 25px; } li { margin-bottom: 8px; }
+        @media (max-width: 768px) { .content-wrapper { padding: 0 15px; } .lesson-hero, .content-card { padding: 25px; } .lesson-hero h1 { font-size: 1.5em; } }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <a href="index.html" class="back-btn">&#x2B05; Voltar ao Dashboard</a>
+        <span class="page-badge">Cap&iacute;tulo 3 &mdash; Vari&aacute;veis e Entrada</span>
+        <button class="slide-toggle" id="slideToggleBtn">&#x1F4FA; Modo Slide</button>
+    </div>
+    <div class="content-wrapper">
+        <div class="lesson-hero">
+            <h1>&#x1F3F7; Nomes de Vari&aacute;veis e Tipos Num&eacute;ricos</h1>
+            <p class="subtitle">Se&ccedil;&otilde;es 3.1 e 3.2 &mdash; Como batizar suas vari&aacute;veis e os tipos de n&uacute;meros</p>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x1F4DB; Regras para nomes de vari&aacute;veis</h2>
+            <p>Em Python, nomes de vari&aacute;veis devem come&ccedil;ar obrigatoriamente com uma <strong>letra</strong>, mas podem conter n&uacute;meros e o s&iacute;mbolo sublinha (<code>_</code>).</p>
+            <table class="op-table">
+                <thead><tr><th>Nome</th><th>V&aacute;lido?</th><th>Coment&aacute;rio</th></tr></thead>
+                <tbody>
+                    <tr><td><code>a1</code></td><td class="valid">Sim</td><td>Embora contenha n&uacute;mero, come&ccedil;a com letra</td></tr>
+                    <tr><td><code>velocidade</code></td><td class="valid">Sim</td><td>Nome formado por letras</td></tr>
+                    <tr><td><code>velocidade90</code></td><td class="valid">Sim</td><td>Letras e n&uacute;meros, inicia com letra</td></tr>
+                    <tr><td><code>sal&aacute;rio_m&eacute;dio</code></td><td class="valid">Sim</td><td>O sublinha (<code>_</code>) &eacute; permitido e facilita a leitura</td></tr>
+                    <tr><td><code>sal&aacute;rio m&eacute;dio</code></td><td class="invalid">N&atilde;o</td><td>N&atilde;o pode conter espa&ccedil;os</td></tr>
+                    <tr><td><code>_b</code></td><td class="valid">Sim</td><td>Sublinha &eacute; aceito no in&iacute;cio</td></tr>
+                    <tr><td><code>1a</code></td><td class="invalid">N&atilde;o</td><td>N&atilde;o pode come&ccedil;ar com n&uacute;mero</td></tr>
+                </tbody>
+            </table>
+            <div class="highlight-box">
+                <p>&#x1F4A1; Dica: Python 3 aceita acentos em nomes de vari&aacute;veis (como <code>sal&aacute;rio</code>), pois usa codifica&ccedil;&atilde;o UTF-8. Mas muitos programadores preferem evitar acentos por compatibilidade.</p>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x1F522; Vari&aacute;veis num&eacute;ricas</h2>
+            <p>Python tem dois tipos principais de n&uacute;meros:</p>
+            <ul>
+                <li><strong>Inteiros (int)</strong> &mdash; n&uacute;meros sem parte decimal: <code>1, 0, -5, 550, 30000</code></li>
+                <li><strong>Ponto flutuante (float)</strong> &mdash; n&uacute;meros com casa decimal: <code>1.0, 5478, 10.478, 3.14</code></li>
+            </ul>
+            <div class="code-block">
+                <span class="code-label">Exemplos</span>
+<span class="prompt">&gt;&gt;&gt;</span> type(5)
+<span class="output">&lt;class 'int'&gt;</span>
+<span class="prompt">&gt;&gt;&gt;</span> type(5.0)
+<span class="output">&lt;class 'float'&gt;</span>
+<span class="prompt">&gt;&gt;&gt;</span> type(-2)
+<span class="output">&lt;class 'int'&gt;</span>
+<span class="prompt">&gt;&gt;&gt;</span> type(1.333)
+<span class="output">&lt;class 'float'&gt;</span>
+            </div>
+            <p><strong>Aten&ccedil;&atilde;o:</strong> Em Python usamos o <strong>ponto</strong> como separador decimal, n&atilde;o a v&iacute;rgula. Ent&atilde;o &eacute; <code>3.14</code> e n&atilde;o <code>3,14</code>. Tamb&eacute;m n&atilde;o usamos separador de milhar: um milh&atilde;o &eacute; <code>1000000</code>.</p>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x1F4BB; Representa&ccedil;&atilde;o bin&aacute;ria</h2>
+            <p>Internamente, o computador representa todos os n&uacute;meros no <strong>sistema bin&aacute;rio</strong> (base 2), usando apenas os d&iacute;gitos 0 e 1.</p>
+            <p>Por exemplo, o n&uacute;mero <strong>1010</strong> em bin&aacute;rio representa:</p>
+            <div class="code-block">
+                <span class="code-label">Base 2 &rarr; Base 10</span>
+1010 = 1&times;2&sup3; + 0&times;2&sup2; + 1&times;2&sup1; + 0&times;2&sup0;
+     = 1&times;8 + 0&times;4 + 1&times;2 + 0&times;1
+     = 8 + 2
+     = <span class="output">10</span>
+            </div>
+            <p>Para n&uacute;meros inteiros, Python tem precis&atilde;o ilimitada &mdash; pode trabalhar com n&uacute;meros enormes sem problemas. Para ponto flutuante, existem limites de precis&atilde;o (por isso <code>3 * 0.1</code> pode dar <code>0.30000000000000004</code>).</p>
+        </div>
+
+        <div class="nav-footer">
+            <a href="index.html" class="nav-link">&#x2B05; Dashboard</a>
+            <a href="cap3-02-tipo-logico.html" class="nav-link">Pr&oacute;xima: Tipo L&oacute;gico &#x27A1;</a>
+        </div>
+    </div>
+    <script src="slide-mode.js"></script>
+</body>
+</html>

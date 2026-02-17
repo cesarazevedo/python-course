@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aula 3.5 - Sequências, Tempo e Rastreamento</title>
+    <link rel="stylesheet" href="slide-mode.css">
+    <style>
+        :root { --primary: #306998; --secondary: #FFD43B; --bg-light: #f4f7fe; --text-dark: #2d3748; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-light); color: var(--text-dark); line-height: 1.7; }
+        .top-bar { background: white; padding: 15px 30px; display: flex; align-items: center; gap: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 10; }
+        .back-btn { text-decoration: none; color: var(--primary); font-weight: 600; display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; transition: background 0.3s; }
+        .back-btn:hover { background: rgba(48,105,152,0.08); }
+        .page-badge { font-size: 0.8em; padding: 4px 12px; border-radius: 20px; background: rgba(230,57,70,0.12); color: #c1121f; font-weight: 600; }
+        .content-wrapper { max-width: 800px; margin: 40px auto; padding: 0 30px; }
+        .lesson-hero { background: white; border-radius: 16px; padding: 40px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        .lesson-hero h1 { font-size: 2em; margin-bottom: 10px; color: var(--primary); }
+        .lesson-hero .subtitle { font-size: 1.1em; color: #718096; }
+        .content-card { background: white; border-radius: 16px; padding: 35px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 25px; }
+        .content-card h2 { font-size: 1.4em; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .content-card p { margin-bottom: 15px; text-align: justify; }
+        .highlight-box { background: linear-gradient(135deg, rgba(48,105,152,0.05), rgba(255,212,59,0.1)); border-left: 4px solid var(--secondary); padding: 20px 25px; border-radius: 0 12px 12px 0; margin: 20px 0; }
+        .highlight-box p { margin-bottom: 0; font-style: italic; }
+        .code-block { background: #1e293b; color: #e2e8f0; padding: 20px 25px; border-radius: 12px; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.95em; margin: 15px 0; overflow-x: auto; position: relative; }
+        .code-block .code-label { position: absolute; top: 8px; right: 12px; font-size: 0.75em; color: #64748b; font-family: 'Segoe UI', sans-serif; }
+        .code-block .comment { color: #64748b; font-style: italic; }
+        .code-block .number { color: #f472b6; }
+        .code-block .function { color: #93c5fd; }
+        .trace-table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+        .trace-table th, .trace-table td { padding: 10px 16px; text-align: center; border: 1px solid #e2e8f0; font-family: 'Consolas', monospace; }
+        .trace-table th { background: var(--primary); color: white; font-family: 'Segoe UI', sans-serif; }
+        .trace-table .line-num { background: #f8fafc; color: #718096; font-weight: 600; }
+        .trace-table tr:nth-child(even) { background: #f8fafc; }
+        .nav-footer { display: flex; justify-content: space-between; margin-top: 40px; padding-bottom: 40px; }
+        .nav-link { text-decoration: none; color: var(--primary); font-weight: 600; padding: 12px 24px; border-radius: 10px; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: all 0.3s; }
+        .nav-link:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        ul, ol { margin: 10px 0 15px 25px; } li { margin-bottom: 8px; }
+        @media (max-width: 768px) { .content-wrapper { padding: 0 15px; } .lesson-hero, .content-card { padding: 25px; } .lesson-hero h1 { font-size: 1.5em; } }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <a href="index.html" class="back-btn">&#x2B05; Voltar ao Dashboard</a>
+        <span class="page-badge">Cap&iacute;tulo 3 &mdash; Vari&aacute;veis e Entrada</span>
+        <button class="slide-toggle" id="slideToggleBtn">&#x1F4FA; Modo Slide</button>
+    </div>
+    <div class="content-wrapper">
+        <div class="lesson-hero">
+            <h1>&#x1F50D; Sequ&ecirc;ncias, Tempo e Rastreamento</h1>
+            <p class="subtitle">Se&ccedil;&otilde;es 3.5 e 3.6 &mdash; Entendendo como o programa executa linha a linha</p>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x23F1; Vari&aacute;veis mudam no tempo</h2>
+            <p>Um programa &eacute; executado <strong>linha por linha</strong>, de cima para baixo. O valor de uma vari&aacute;vel pode mudar ao longo da execu&ccedil;&atilde;o &mdash; o valor anterior &eacute; substitu&iacute;do pelo novo.</p>
+            <p>Observe o programa abaixo que registra compras e calcula uma d&iacute;vida:</p>
+            <div class="code-block">
+                <span class="code-label">Listagem 3.15</span>
+d&iacute;vida = <span class="number">0</span>           <span class="comment"># linha 1</span>
+compra = <span class="number">100</span>         <span class="comment"># linha 2</span>
+d&iacute;vida = d&iacute;vida + compra  <span class="comment"># linha 3</span>
+compra = <span class="number">200</span>         <span class="comment"># linha 4</span>
+d&iacute;vida = d&iacute;vida + compra  <span class="comment"># linha 5</span>
+compra = <span class="number">300</span>         <span class="comment"># linha 6</span>
+d&iacute;vida = d&iacute;vida + compra  <span class="comment"># linha 7</span>
+compra = <span class="number">0</span>           <span class="comment"># linha 8</span>
+<span class="function">print</span>(d&iacute;vida)         <span class="comment"># linha 9</span>
+            </div>
+            <p>O resultado &eacute; <strong>600</strong> (100 + 200 + 300). Mas como chegamos l&aacute;?</p>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x1F4CB; Rastreamento: a arte de debugar no papel</h2>
+            <p><strong>Rastrear</strong> um programa &eacute; acompanhar o valor de cada vari&aacute;vel ap&oacute;s cada linha. Use l&aacute;pis e papel, criando colunas para cada vari&aacute;vel:</p>
+            <table class="trace-table">
+                <thead><tr><th>Linha</th><th>d&iacute;vida</th><th>compra</th><th>Tela</th></tr></thead>
+                <tbody>
+                    <tr><td class="line-num">1</td><td>0</td><td>&mdash;</td><td></td></tr>
+                    <tr><td class="line-num">2</td><td>0</td><td>100</td><td></td></tr>
+                    <tr><td class="line-num">3</td><td>100</td><td>100</td><td></td></tr>
+                    <tr><td class="line-num">4</td><td>100</td><td>200</td><td></td></tr>
+                    <tr><td class="line-num">5</td><td>300</td><td>200</td><td></td></tr>
+                    <tr><td class="line-num">6</td><td>300</td><td>300</td><td></td></tr>
+                    <tr><td class="line-num">7</td><td>600</td><td>300</td><td></td></tr>
+                    <tr><td class="line-num">8</td><td>600</td><td>0</td><td></td></tr>
+                    <tr><td class="line-num">9</td><td>600</td><td>0</td><td>600</td></tr>
+                </tbody>
+            </table>
+            <p>Veja como <code>d&iacute;vida</code> acumula os valores e <code>compra</code> &eacute; substitu&iacute;da a cada nova atribui&ccedil;&atilde;o.</p>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x1F4A1; Por que rastrear?</h2>
+            <p>Dominar o rastreamento &eacute; <strong>essencial</strong> para programar. Ele ajuda a:</p>
+            <ul>
+                <li><strong>Entender</strong> como programas realmente funcionam</li>
+                <li><strong>Encontrar erros</strong> (bugs) quando algo d&aacute; errado</li>
+                <li><strong>Verificar</strong> se seu programa faz o que voc&ecirc; espera</li>
+            </ul>
+            <div class="highlight-box">
+                <p>&ldquo;Um programa n&atilde;o pode ser lido como um texto. Deve ser analisado cuidadosamente, linha a linha, verificando os efeitos e mudan&ccedil;as no valor de cada vari&aacute;vel.&rdquo;</p>
+            </div>
+            <p><strong>Dicas para rastrear:</strong></p>
+            <ul>
+                <li>Use l&aacute;pis e borracha (ou uma tabela no caderno)</li>
+                <li>Crie uma coluna para cada vari&aacute;vel e uma para a &ldquo;Tela&rdquo;</li>
+                <li>Leia uma linha por vez e anote o novo valor</li>
+                <li>Se o valor mudar, risque o anterior e escreva o novo</li>
+                <li>Comece do in&iacute;cio sempre que encontrar um erro</li>
+            </ul>
+        </div>
+
+        <div class="nav-footer">
+            <a href="cap3-04-strings.html" class="nav-link">&#x2B05; Anterior</a>
+            <a href="cap3-06-entrada-dados.html" class="nav-link">Pr&oacute;xima: input() &#x27A1;</a>
+        </div>
+    </div>
+    <script src="slide-mode.js"></script>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aula 3.3 - Operadores Lógicos: not, and, or</title>
+    <link rel="stylesheet" href="slide-mode.css">
+    <style>
+        :root { --primary: #306998; --secondary: #FFD43B; --bg-light: #f4f7fe; --text-dark: #2d3748; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-light); color: var(--text-dark); line-height: 1.7; }
+        .top-bar { background: white; padding: 15px 30px; display: flex; align-items: center; gap: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 10; }
+        .back-btn { text-decoration: none; color: var(--primary); font-weight: 600; display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; transition: background 0.3s; }
+        .back-btn:hover { background: rgba(48,105,152,0.08); }
+        .page-badge { font-size: 0.8em; padding: 4px 12px; border-radius: 20px; background: rgba(230,57,70,0.12); color: #c1121f; font-weight: 600; }
+        .content-wrapper { max-width: 800px; margin: 40px auto; padding: 0 30px; }
+        .lesson-hero { background: white; border-radius: 16px; padding: 40px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        .lesson-hero h1 { font-size: 2em; margin-bottom: 10px; color: var(--primary); }
+        .lesson-hero .subtitle { font-size: 1.1em; color: #718096; }
+        .content-card { background: white; border-radius: 16px; padding: 35px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 25px; }
+        .content-card h2 { font-size: 1.4em; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .content-card p { margin-bottom: 15px; text-align: justify; }
+        .highlight-box { background: linear-gradient(135deg, rgba(48,105,152,0.05), rgba(255,212,59,0.1)); border-left: 4px solid var(--secondary); padding: 20px 25px; border-radius: 0 12px 12px 0; margin: 20px 0; }
+        .highlight-box p { margin-bottom: 0; font-style: italic; }
+        .code-block { background: #1e293b; color: #e2e8f0; padding: 20px 25px; border-radius: 12px; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.95em; margin: 15px 0; overflow-x: auto; position: relative; }
+        .code-block .code-label { position: absolute; top: 8px; right: 12px; font-size: 0.75em; color: #64748b; font-family: 'Segoe UI', sans-serif; }
+        .code-block .prompt { color: #93c5fd; }
+        .code-block .output { color: #fbbf24; }
+        .code-block .keyword { color: #c084fc; }
+        .truth-tables { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 20px 0; }
+        .truth-table { border-collapse: collapse; width: 100%; }
+        .truth-table caption { font-weight: 700; color: var(--primary); margin-bottom: 8px; font-size: 1.05em; }
+        .truth-table th, .truth-table td { padding: 8px 12px; text-align: center; border: 1px solid #e2e8f0; }
+        .truth-table th { background: #f8fafc; color: var(--primary); font-weight: 600; }
+        .truth-table .t { color: #38b000; font-weight: 600; }
+        .truth-table .f { color: #e53e3e; font-weight: 600; }
+        .nav-footer { display: flex; justify-content: space-between; margin-top: 40px; padding-bottom: 40px; }
+        .nav-link { text-decoration: none; color: var(--primary); font-weight: 600; padding: 12px 24px; border-radius: 10px; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: all 0.3s; }
+        .nav-link:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        ul, ol { margin: 10px 0 15px 25px; } li { margin-bottom: 8px; }
+        @media (max-width: 768px) { .content-wrapper { padding: 0 15px; } .lesson-hero, .content-card { padding: 25px; } .lesson-hero h1 { font-size: 1.5em; } }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <a href="index.html" class="back-btn">&#x2B05; Voltar ao Dashboard</a>
+        <span class="page-badge">Cap&iacute;tulo 3 &mdash; Vari&aacute;veis e Entrada</span>
+        <button class="slide-toggle" id="slideToggleBtn">&#x1F4FA; Modo Slide</button>
+    </div>
+    <div class="content-wrapper">
+        <div class="lesson-hero">
+            <h1>&#x1F9E0; Operadores L&oacute;gicos: not, and, or</h1>
+            <p class="subtitle">Se&ccedil;&otilde;es 3.3.2 e 3.3.3 &mdash; Combinando condi&ccedil;&otilde;es com l&oacute;gica booleana</p>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x1F4CB; Tabelas Verdade</h2>
+            <p>Python tem tr&ecirc;s operadores l&oacute;gicos: <code>not</code> (n&atilde;o), <code>and</code> (e) e <code>or</code> (ou). Cada um segue uma <strong>tabela verdade</strong>:</p>
+            <div class="truth-tables">
+                <table class="truth-table">
+                    <caption>not (n&atilde;o)</caption>
+                    <thead><tr><th>V</th><th>not V</th></tr></thead>
+                    <tbody>
+                        <tr><td class="t">V</td><td class="f">F</td></tr>
+                        <tr><td class="f">F</td><td class="t">V</td></tr>
+                    </tbody>
+                </table>
+                <table class="truth-table">
+                    <caption>and (e)</caption>
+                    <thead><tr><th>V1</th><th>V2</th><th>V1 and V2</th></tr></thead>
+                    <tbody>
+                        <tr><td class="t">V</td><td class="t">V</td><td class="t">V</td></tr>
+                        <tr><td class="t">V</td><td class="f">F</td><td class="f">F</td></tr>
+                        <tr><td class="f">F</td><td class="t">V</td><td class="f">F</td></tr>
+                        <tr><td class="f">F</td><td class="f">F</td><td class="f">F</td></tr>
+                    </tbody>
+                </table>
+                <table class="truth-table">
+                    <caption>or (ou)</caption>
+                    <thead><tr><th>V1</th><th>V2</th><th>V1 or V2</th></tr></thead>
+                    <tbody>
+                        <tr><td class="t">V</td><td class="t">V</td><td class="t">V</td></tr>
+                        <tr><td class="t">V</td><td class="f">F</td><td class="t">V</td></tr>
+                        <tr><td class="f">F</td><td class="t">V</td><td class="t">V</td></tr>
+                        <tr><td class="f">F</td><td class="f">F</td><td class="f">F</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>Resumindo: <code>not</code> inverte. <code>and</code> s&oacute; &eacute; True se <strong>ambos</strong> forem True. <code>or</code> &eacute; True se <strong>pelo menos um</strong> for True.</p>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x1F4BB; Exemplos no interpretador</h2>
+            <div class="code-block">
+                <span class="code-label">not</span>
+<span class="prompt">&gt;&gt;&gt;</span> <span class="keyword">not</span> True
+<span class="output">False</span>
+<span class="prompt">&gt;&gt;&gt;</span> <span class="keyword">not</span> False
+<span class="output">True</span>
+            </div>
+            <div class="code-block">
+                <span class="code-label">and</span>
+<span class="prompt">&gt;&gt;&gt;</span> True <span class="keyword">and</span> True
+<span class="output">True</span>
+<span class="prompt">&gt;&gt;&gt;</span> True <span class="keyword">and</span> False
+<span class="output">False</span>
+<span class="prompt">&gt;&gt;&gt;</span> False <span class="keyword">and</span> True
+<span class="output">False</span>
+            </div>
+            <div class="code-block">
+                <span class="code-label">or</span>
+<span class="prompt">&gt;&gt;&gt;</span> True <span class="keyword">or</span> False
+<span class="output">True</span>
+<span class="prompt">&gt;&gt;&gt;</span> False <span class="keyword">or</span> True
+<span class="output">True</span>
+<span class="prompt">&gt;&gt;&gt;</span> False <span class="keyword">or</span> False
+<span class="output">False</span>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x1F3AF; Express&otilde;es l&oacute;gicas combinadas</h2>
+            <p>Podemos combinar operadores relacionais com l&oacute;gicos. A <strong>preced&ecirc;ncia</strong> &eacute;: <code>not</code> primeiro, depois <code>and</code>, depois <code>or</code>.</p>
+            <p><strong>Exemplo pr&aacute;tico:</strong> Uma pessoa pode fazer empr&eacute;stimo se ganhar mais de R$ 1000 <strong>e</strong> tiver mais de 18 anos:</p>
+            <div class="code-block">
+                <span class="code-label">Exemplo</span>
+sal&aacute;rio &gt; 1000 <span class="keyword">and</span> idade &gt; 18
+            </div>
+            <p>Se <code>sal&aacute;rio = 100</code> e <code>idade = 20</code>:</p>
+            <div class="code-block">
+100 &gt; 1000 <span class="keyword">and</span> 20 &gt; 18
+  False    <span class="keyword">and</span>  True
+         <span class="output">False</span>
+            </div>
+            <p>Se <code>sal&aacute;rio = 2000</code> e <code>idade = 30</code>:</p>
+            <div class="code-block">
+2000 &gt; 1000 <span class="keyword">and</span> 30 &gt; 18
+   True     <span class="keyword">and</span>  True
+          <span class="output">True</span>
+            </div>
+
+            <div class="highlight-box">
+                <p>&#x1F4A1; Express&otilde;es com mais de um operador l&oacute;gico: avalie primeiro <code>not</code>, depois <code>and</code>, por &uacute;ltimo <code>or</code>. Na d&uacute;vida, use par&ecirc;nteses para deixar claro.</p>
+            </div>
+        </div>
+
+        <div class="nav-footer">
+            <a href="cap3-02-tipo-logico.html" class="nav-link">&#x2B05; Anterior</a>
+            <a href="cap3-04-strings.html" class="nav-link">Pr&oacute;xima: Strings &#x27A1;</a>
+        </div>
+    </div>
+    <script src="slide-mode.js"></script>
+</body>
+</html>
