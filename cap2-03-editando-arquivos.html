@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aula 2.3 - Editando e Salvando Programas</title>
+    <link rel="stylesheet" href="slide-mode.css">
+    <style>
+        :root { --primary: #306998; --secondary: #FFD43B; --bg-light: #f4f7fe; --text-dark: #2d3748; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-light); color: var(--text-dark); line-height: 1.7; }
+        .top-bar { background: white; padding: 15px 30px; display: flex; align-items: center; gap: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 10; }
+        .back-btn { text-decoration: none; color: var(--primary); font-weight: 600; display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; transition: background 0.3s; }
+        .back-btn:hover { background: rgba(48,105,152,0.08); }
+        .page-badge { font-size: 0.8em; padding: 4px 12px; border-radius: 20px; background: rgba(56,176,0,0.15); color: #2d8a00; font-weight: 600; }
+        .content-wrapper { max-width: 800px; margin: 40px auto; padding: 0 30px; }
+        .lesson-hero { background: white; border-radius: 16px; padding: 40px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        .lesson-hero h1 { font-size: 2em; margin-bottom: 10px; color: var(--primary); }
+        .lesson-hero .subtitle { font-size: 1.1em; color: #718096; }
+        .content-card { background: white; border-radius: 16px; padding: 35px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 25px; }
+        .content-card h2 { font-size: 1.4em; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .content-card p { margin-bottom: 15px; text-align: justify; }
+        .highlight-box { background: linear-gradient(135deg, rgba(48,105,152,0.05), rgba(255,212,59,0.1)); border-left: 4px solid var(--secondary); padding: 20px 25px; border-radius: 0 12px 12px 0; margin: 20px 0; }
+        .highlight-box p { margin-bottom: 0; font-style: italic; }
+        .warning-box { background: rgba(229,62,62,0.06); border-left: 4px solid #e53e3e; padding: 20px 25px; border-radius: 0 12px 12px 0; margin: 20px 0; }
+        .warning-box p { margin-bottom: 0; }
+        .code-block { background: #1e293b; color: #e2e8f0; padding: 20px 25px; border-radius: 12px; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.95em; margin: 15px 0; overflow-x: auto; position: relative; }
+        .code-block .code-label { position: absolute; top: 8px; right: 12px; font-size: 0.75em; color: #64748b; font-family: 'Segoe UI', sans-serif; }
+        .code-block .string { color: #86efac; }
+        .code-block .function { color: #93c5fd; }
+        .step-list { counter-reset: steps; list-style: none; margin: 15px 0; padding: 0; }
+        .step-list li { counter-increment: steps; padding: 12px 15px 12px 55px; position: relative; margin-bottom: 10px; background: #f8fafc; border-radius: 10px; border: 1px solid #e2e8f0; }
+        .step-list li::before { content: counter(steps); position: absolute; left: 15px; top: 12px; width: 28px; height: 28px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85em; }
+        .nav-footer { display: flex; justify-content: space-between; margin-top: 40px; padding-bottom: 40px; }
+        .nav-link { text-decoration: none; color: var(--primary); font-weight: 600; padding: 12px 24px; border-radius: 10px; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: all 0.3s; }
+        .nav-link:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        ul, ol { margin: 10px 0 15px 25px; }
+        li { margin-bottom: 8px; }
+        @media (max-width: 768px) { .content-wrapper { padding: 0 15px; } .lesson-hero, .content-card { padding: 25px; } .lesson-hero h1 { font-size: 1.5em; } }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <a href="index.html" class="back-btn">&#x2B05; Voltar ao Dashboard</a>
+        <span class="page-badge">Cap&iacute;tulo 2 &mdash; Preparando o Ambiente</span>
+        <button class="slide-toggle" id="slideToggleBtn">&#x1F4FA; Modo Slide</button>
+    </div>
+
+    <div class="content-wrapper">
+        <div class="lesson-hero">
+            <h1>&#x1F4DD; Editando e Salvando Programas</h1>
+            <p class="subtitle">Se&ccedil;&otilde;es 2.3 e 2.4 &mdash; Do interpretador ao seu primeiro arquivo .py</p>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x1F4C4; Interpretador vs. Editor de Textos</h2>
+            <p>At&eacute; agora, digitamos comandos diretamente no interpretador. Isso &eacute; &oacute;timo para testes r&aacute;pidos, mas para programas maiores precisamos de <strong>arquivos</strong>.</p>
+            <p>Um programa Python nada mais &eacute; que um <strong>arquivo-texto</strong> escrito em um formato especial (a linguagem Python). Podemos usar qualquer editor de textos: o pr&oacute;prio IDLE, VS Code, Sublime Text, Vim, etc.</p>
+
+            <div class="warning-box">
+                <p>&#x26A0; <strong>Nunca use o Microsoft Word ou LibreOffice Writer!</strong> Esses editores gravam arquivos em formatos especiais que n&atilde;o servem para programar. Use sempre um <strong>editor de c&oacute;digo</strong> ou o pr&oacute;prio IDLE.</p>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x1F4BE; Criando seu primeiro arquivo no IDLE</h2>
+            <p>O IDLE tem seu pr&oacute;prio editor de textos embutido. Siga os passos:</p>
+
+            <ol class="step-list">
+                <li>Com o IDLE aberto, clique no menu <strong>File &rarr; New File</strong> (Ctrl+N)</li>
+                <li>Uma nova janela se abre &mdash; essa &eacute; a <strong>janela do editor de textos</strong></li>
+                <li>Digite seu programa:<br>
+                    <div class="code-block" style="margin-top:10px">
+                        <span class="code-label">teste.py</span>
+<span class="function">print</span>(<span class="string">"Oi"</span>)
+                    </div>
+                </li>
+                <li>Salve com <strong>File &rarr; Save</strong> (Ctrl+S). Nomeie como <code>teste.py</code></li>
+                <li>Execute com <strong>Run &rarr; Run Module</strong> (F5)</li>
+            </ol>
+
+            <p>O resultado aparecer&aacute; na janela do interpretador (Python Shell). Voc&ecirc; ver&aacute; a palavra <code>RESTART</code> seguida do resultado <code>Oi</code>.</p>
+
+            <div class="highlight-box">
+                <p>&#x1F4A1; Lembre-se: a extens&atilde;o <strong>.py</strong> n&atilde;o &eacute; adicionada automaticamente pelo IDLE. Sempre salve seus programas com a extens&atilde;o .py!</p>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x26A0; Cuidados ao digitar programas</h2>
+            <p>Ao digitar um programa, preste aten&ccedil;&atilde;o nestes detalhes:</p>
+            <ul>
+                <li><strong>Mai&uacute;sculas e min&uacute;sculas s&atilde;o diferentes</strong> &mdash; <code>print</code> funciona, <code>Print</code> d&aacute; erro. Python &eacute; <em>case-sensitive</em></li>
+                <li><strong>Aspas devem ser abertas e fechadas</strong> &mdash; toda vez que abrir aspas, feche-as. O IDLE muda a cor do texto entre aspas para ajudar</li>
+                <li><strong>Par&ecirc;nteses n&atilde;o s&atilde;o opcionais</strong> &mdash; n&atilde;o remova os par&ecirc;nteses das fun&ccedil;&otilde;es. Preste a mesma aten&ccedil;&atilde;o que d&aacute; &agrave;s aspas</li>
+                <li><strong>Espa&ccedil;os s&atilde;o muito importantes</strong> &mdash; Python usa a <strong>indenta&ccedil;&atilde;o</strong> (espa&ccedil;os no in&iacute;cio da linha) para organizar o c&oacute;digo. Nunca junte duas linhas em uma s&oacute;</li>
+            </ul>
+
+            <div class="highlight-box">
+                <p>&ldquo;Organize seus programas em uma pasta espec&iacute;fica no computador. Crie um diret&oacute;rio para cada cap&iacute;tulo. Com o tempo, essa organiza&ccedil;&atilde;o vai facilitar muito.&rdquo;</p>
+            </div>
+        </div>
+
+        <div class="nav-footer">
+            <a href="cap2-02-idle-interpretador.html" class="nav-link">&#x2B05; Anterior</a>
+            <a href="cap2-04-primeiros-programas.html" class="nav-link">Pr&oacute;xima: Primeiros programas &#x27A1;</a>
+        </div>
+    </div>
+
+    <script src="slide-mode.js"></script>
+</body>
+</html>

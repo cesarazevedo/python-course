@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aula 2.1 - Instalação do Python</title>
+    <link rel="stylesheet" href="slide-mode.css">
+    <style>
+        :root {
+            --primary: #306998;
+            --secondary: #FFD43B;
+            --bg-light: #f4f7fe;
+            --text-dark: #2d3748;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.7;
+        }
+        .top-bar {
+            background: white;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .back-btn {
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: background 0.3s;
+        }
+        .back-btn:hover { background: rgba(48,105,152,0.08); }
+        .page-badge {
+            font-size: 0.8em;
+            padding: 4px 12px;
+            border-radius: 20px;
+            background: rgba(56,176,0,0.15);
+            color: #2d8a00;
+            font-weight: 600;
+        }
+        .content-wrapper {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 30px;
+        }
+        .lesson-hero {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+        .lesson-hero h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        .lesson-hero .subtitle {
+            font-size: 1.1em;
+            color: #718096;
+        }
+        .content-card {
+            background: white;
+            border-radius: 16px;
+            padding: 35px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+        }
+        .content-card h2 {
+            font-size: 1.4em;
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .content-card p { margin-bottom: 15px; text-align: justify; }
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(48,105,152,0.05), rgba(255,212,59,0.1));
+            border-left: 4px solid var(--secondary);
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 20px 0;
+        }
+        .highlight-box p { margin-bottom: 0; font-style: italic; }
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 20px 25px;
+            border-radius: 12px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.95em;
+            margin: 15px 0;
+            overflow-x: auto;
+            position: relative;
+        }
+        .code-block .code-label {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            font-size: 0.75em;
+            color: #64748b;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .step-list { counter-reset: steps; list-style: none; margin: 15px 0; padding: 0; }
+        .step-list li {
+            counter-increment: steps;
+            padding: 12px 15px 12px 55px;
+            position: relative;
+            margin-bottom: 10px;
+            background: #f8fafc;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+        }
+        .step-list li::before {
+            content: counter(steps);
+            position: absolute;
+            left: 15px;
+            top: 12px;
+            width: 28px;
+            height: 28px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85em;
+        }
+        .nav-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-bottom: 40px;
+        }
+        .nav-link {
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 600;
+            padding: 12px 24px;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+        }
+        .nav-link:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        ul, ol { margin: 10px 0 15px 25px; }
+        li { margin-bottom: 8px; }
+        @media (max-width: 768px) {
+            .content-wrapper { padding: 0 15px; }
+            .lesson-hero, .content-card { padding: 25px; }
+            .lesson-hero h1 { font-size: 1.5em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <a href="index.html" class="back-btn">&#x2B05; Voltar ao Dashboard</a>
+        <span class="page-badge">Cap&iacute;tulo 2 &mdash; Preparando o Ambiente</span>
+        <button class="slide-toggle" id="slideToggleBtn">&#x1F4FA; Modo Slide</button>
+    </div>
+
+    <div class="content-wrapper">
+        <div class="lesson-hero">
+            <h1>&#x1F4E5; Instala&ccedil;&atilde;o do Python</h1>
+            <p class="subtitle">Se&ccedil;&otilde;es 2.1, 2.1.1, 2.1.2, 2.1.3 &mdash; Colocando o Python na sua m&aacute;quina</p>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x1F9F0; O que &eacute; o interpretador?</h2>
+            <p>Antes de programar, precisamos instalar o <strong>interpretador Python</strong>. Ele &eacute; o programa que aceita comandos escritos em Python e os executa, linha a linha. &Eacute; ele quem traduz nossos programas em um formato que o computador entende.</p>
+            <p>Sem o interpretador, nossos programas seriam apenas texto. Ele tamb&eacute;m verifica se escrevemos corretamente, mostrando <strong>mensagens de erro</strong> quando encontra algum problema.</p>
+
+            <div class="highlight-box">
+                <p>&ldquo;O interpretador Python &eacute; como um tradutor: voc&ecirc; fala em Python, ele traduz para o computador executar.&rdquo;</p>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x1F5A5; Instalando no Windows</h2>
+            <p>O Python est&aacute; dispon&iacute;vel gratuitamente no site oficial. Veja o passo a passo:</p>
+
+            <ol class="step-list">
+                <li>Acesse <strong>python.org</strong> e clique em <strong>Downloads</strong></li>
+                <li>Baixe a vers&atilde;o mais recente do Python 3 (ex: Python 3.12)</li>
+                <li>Execute o instalador baixado (.exe)</li>
+                <li><strong>IMPORTANTE:</strong> Marque a op&ccedil;&atilde;o <em>&ldquo;Add Python to PATH&rdquo;</em> antes de clicar em Install</li>
+                <li>Escolha <strong>&ldquo;Install for all users&rdquo;</strong> (recomendado)</li>
+                <li>Aceite o diret&oacute;rio padr&atilde;o ou escolha outro local</li>
+                <li>Aguarde a barra de progresso completar</li>
+                <li>Clique em <strong>Finish</strong> para concluir</li>
+            </ol>
+
+            <div class="highlight-box">
+                <p>&#x26A0; Dica importante: Marcar &ldquo;Add Python to PATH&rdquo; evita muita dor de cabe&ccedil;a depois. Se esqueceu, reinstale marcando essa op&ccedil;&atilde;o.</p>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x1F427; Instalando no Linux</h2>
+            <p>A maioria das distribui&ccedil;&otilde;es Linux j&aacute; vem com Python instalado. Para verificar a vers&atilde;o, abra o terminal e digite:</p>
+
+            <div class="code-block">
+                <span class="code-label">Terminal</span>
+python3 --version
+            </div>
+
+            <p>Se precisar instalar ou atualizar no <strong>Ubuntu/Debian</strong>:</p>
+
+            <div class="code-block">
+                <span class="code-label">Terminal</span>
+sudo apt-get install python3
+sudo apt-get install idle-python3
+            </div>
+
+            <p>Voc&ecirc; precisa de permiss&otilde;es de administrador (root) para instalar via apt-get.</p>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x1F34E; Instalando no Mac OS X</h2>
+            <p>Os Macs v&ecirc;m com uma vers&atilde;o do Python, mas geralmente &eacute; a vers&atilde;o 2.x (antiga). Para instalar o Python 3, voc&ecirc; pode:</p>
+            <ul>
+                <li>Baixar o instalador diretamente do <strong>python.org</strong> (formato .pkg)</li>
+                <li>Usar o <strong>Homebrew</strong>: <code>brew install python3</code></li>
+                <li>Usar o <strong>MacPorts</strong>: <code>sudo port install python34</code></li>
+            </ul>
+            <p>Para executar o interpretador ap&oacute;s instalar, digite <code>python3</code> no terminal.</p>
+        </div>
+
+        <div class="nav-footer">
+            <a href="index.html" class="nav-link">&#x2B05; Dashboard</a>
+            <a href="cap2-02-idle-interpretador.html" class="nav-link">Pr&oacute;xima: IDLE &#x27A1;</a>
+        </div>
+    </div>
+
+    <script src="slide-mode.js"></script>
+</body>
+</html>

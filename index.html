@@ -157,6 +157,15 @@
             background: var(--secondary);
         }
 
+        .tab-btn[data-target="cap2"].active::after {
+            background: #38b000;
+        }
+
+        .badge-cap2 {
+            background: rgba(56, 176, 0, 0.15);
+            color: #2d8a00;
+        }
+
         /* CONTEÚDO DAS ABAS */
         .tab-content {
             flex: 1;
@@ -201,7 +210,7 @@
             width: 120px;
             height: 120px;
             border-radius: 50%;
-            background: conic-gradient(var(--primary) 8%, #e2e8f0 0);
+            background: conic-gradient(var(--primary) 17%, #e2e8f0 0);
             margin: 0 auto;
             display: flex;
             align-items: center;
@@ -210,7 +219,7 @@
         }
 
         .progress-circular::before {
-            content: '8%';
+            content: '17%';
             position: absolute;
             background: white;
             width: 100px;
@@ -373,6 +382,7 @@
         <div class="tabs-nav">
             <button class="tab-btn active" data-target="visao-geral">&#x1F4CA; Vis&atilde;o Geral</button>
             <button class="tab-btn" data-target="cap1">&#x1F680; Cap 1 &mdash; Motiva&ccedil;&atilde;o</button>
+            <button class="tab-btn" data-target="cap2">&#x2699; Cap 2 &mdash; Preparando o Ambiente</button>
         </div>
 
         <!-- VISÃO GERAL -->
@@ -381,7 +391,7 @@
                 <div class="dash-card">
                     <h3>&#x1F4C8; Progresso do Curso</h3>
                     <div class="progress-circular"></div>
-                    <p style="text-align:center; margin-top:12px; color:#718096; font-size:0.9em;">Cap&iacute;tulo 1 de ~12</p>
+                    <p style="text-align:center; margin-top:12px; color:#718096; font-size:0.9em;">Cap&iacute;tulos 1-2 de ~12</p>
                 </div>
 
                 <div class="dash-card">
@@ -399,7 +409,7 @@
                     <h3>&#x1F4C5; Status dos Cap&iacute;tulos</h3>
                     <ul style="list-style: none; line-height: 2;">
                         <li><strong>Cap 1 &mdash; Motiva&ccedil;&atilde;o</strong><br>&#x2705; Publicado</li>
-                        <li><strong>Cap 2 &mdash; Preparando o Ambiente</strong><br>&#x23F3; Em breve</li>
+                        <li><strong>Cap 2 &mdash; Preparando o Ambiente</strong><br>&#x2705; Publicado</li>
                         <li><strong>Cap 3 &mdash; Vari&aacute;veis e Entrada</strong><br>&#x1F512; Futuro</li>
                         <li><strong>Cap 4 &mdash; Condi&ccedil;&otilde;es</strong><br>&#x1F512; Futuro</li>
                         <li><strong>Cap 5 &mdash; Repeti&ccedil;&otilde;es</strong><br>&#x1F512; Futuro</li>
@@ -478,6 +488,80 @@
                     <div class="lesson-tags">
                         <span class="mini-tag">Python</span>
                         <span class="mini-tag">Linguagem</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- CAPÍTULO 2 — PREPARANDO O AMBIENTE -->
+        <div id="cap2" class="tab-content">
+            <div class="bimestre-title">
+                Preparando o Ambiente <span class="bimestre-badge badge-cap2">Cap&iacute;tulo 2</span>
+            </div>
+
+            <div class="lessons-grid">
+                <a href="cap2-01-instalacao-python.html" class="lesson-card done">
+                    <div class="lesson-header">
+                        <span class="lesson-id">#01&#x1F4E5;</span>
+                        <span class="lesson-status">&#x2705;</span>
+                    </div>
+                    <h4 class="lesson-title">Instala&ccedil;&atilde;o do Python</h4>
+                    <p class="lesson-desc">Baixe e instale o interpretador Python no Windows, Linux ou Mac. Passo a passo completo.</p>
+                    <div class="lesson-tags">
+                        <span class="mini-tag">Instala&ccedil;&atilde;o</span>
+                        <span class="mini-tag">Setup</span>
+                    </div>
+                </a>
+
+                <a href="cap2-02-idle-interpretador.html" class="lesson-card done">
+                    <div class="lesson-header">
+                        <span class="lesson-id">#02&#x1F4BB;</span>
+                        <span class="lesson-status">&#x2705;</span>
+                    </div>
+                    <h4 class="lesson-title">Usando o Interpretador (IDLE)</h4>
+                    <p class="lesson-desc">Abra o IDLE, digite seu primeiro comando e veja o resultado na hora. O playground do Python.</p>
+                    <div class="lesson-tags">
+                        <span class="mini-tag">IDLE</span>
+                        <span class="mini-tag">Interpretador</span>
+                    </div>
+                </a>
+
+                <a href="cap2-03-editando-arquivos.html" class="lesson-card done">
+                    <div class="lesson-header">
+                        <span class="lesson-id">#03&#x1F4DD;</span>
+                        <span class="lesson-status">&#x2705;</span>
+                    </div>
+                    <h4 class="lesson-title">Editando e Salvando Programas</h4>
+                    <p class="lesson-desc">Crie arquivos .py, salve e execute. Aprenda a diferen&ccedil;a entre interpretador e editor de textos.</p>
+                    <div class="lesson-tags">
+                        <span class="mini-tag">Editor</span>
+                        <span class="mini-tag">.py</span>
+                    </div>
+                </a>
+
+                <a href="cap2-04-primeiros-programas.html" class="lesson-card done">
+                    <div class="lesson-header">
+                        <span class="lesson-id">#04&#x1F9EE;</span>
+                        <span class="lesson-status">&#x2705;</span>
+                    </div>
+                    <h4 class="lesson-title">Os Primeiros Programas</h4>
+                    <p class="lesson-desc">print(), calculadora Python, operadores matem&aacute;ticos e preced&ecirc;ncia de opera&ccedil;&otilde;es.</p>
+                    <div class="lesson-tags">
+                        <span class="mini-tag">print</span>
+                        <span class="mini-tag">Operadores</span>
+                    </div>
+                </a>
+
+                <a href="cap2-05-variaveis-atribuicao.html" class="lesson-card done">
+                    <div class="lesson-header">
+                        <span class="lesson-id">#05&#x1F4E6;</span>
+                        <span class="lesson-status">&#x2705;</span>
+                    </div>
+                    <h4 class="lesson-title">Vari&aacute;veis e Atribui&ccedil;&atilde;o</h4>
+                    <p class="lesson-desc">Guarde valores na mem&oacute;ria com vari&aacute;veis. Seu primeiro programa real com c&aacute;lculo de sal&aacute;rio.</p>
+                    <div class="lesson-tags">
+                        <span class="mini-tag">Vari&aacute;veis</span>
+                        <span class="mini-tag">Atribui&ccedil;&atilde;o</span>
                     </div>
                 </a>
             </div>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aula 2.5 - Variáveis e Atribuição</title>
+    <link rel="stylesheet" href="slide-mode.css">
+    <style>
+        :root { --primary: #306998; --secondary: #FFD43B; --bg-light: #f4f7fe; --text-dark: #2d3748; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-light); color: var(--text-dark); line-height: 1.7; }
+        .top-bar { background: white; padding: 15px 30px; display: flex; align-items: center; gap: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 10; }
+        .back-btn { text-decoration: none; color: var(--primary); font-weight: 600; display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; transition: background 0.3s; }
+        .back-btn:hover { background: rgba(48,105,152,0.08); }
+        .page-badge { font-size: 0.8em; padding: 4px 12px; border-radius: 20px; background: rgba(56,176,0,0.15); color: #2d8a00; font-weight: 600; }
+        .content-wrapper { max-width: 800px; margin: 40px auto; padding: 0 30px; }
+        .lesson-hero { background: white; border-radius: 16px; padding: 40px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        .lesson-hero h1 { font-size: 2em; margin-bottom: 10px; color: var(--primary); }
+        .lesson-hero .subtitle { font-size: 1.1em; color: #718096; }
+        .content-card { background: white; border-radius: 16px; padding: 35px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 25px; }
+        .content-card h2 { font-size: 1.4em; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .content-card p { margin-bottom: 15px; text-align: justify; }
+        .highlight-box { background: linear-gradient(135deg, rgba(48,105,152,0.05), rgba(255,212,59,0.1)); border-left: 4px solid var(--secondary); padding: 20px 25px; border-radius: 0 12px 12px 0; margin: 20px 0; }
+        .highlight-box p { margin-bottom: 0; font-style: italic; }
+        .code-block { background: #1e293b; color: #e2e8f0; padding: 20px 25px; border-radius: 12px; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.95em; margin: 15px 0; overflow-x: auto; position: relative; }
+        .code-block .code-label { position: absolute; top: 8px; right: 12px; font-size: 0.75em; color: #64748b; font-family: 'Segoe UI', sans-serif; }
+        .code-block .prompt { color: #93c5fd; }
+        .code-block .output { color: #fbbf24; }
+        .code-block .comment { color: #64748b; font-style: italic; }
+        .code-block .function { color: #93c5fd; }
+        .code-block .keyword { color: #c084fc; }
+        .code-block .number { color: #f472b6; }
+        .exercise-box { background: #f0fdf4; border: 2px solid #bbf7d0; border-radius: 12px; padding: 25px; margin: 20px 0; }
+        .exercise-box h3 { color: #166534; margin-bottom: 12px; font-size: 1.1em; }
+        .exercise-box p { margin-bottom: 8px; }
+        .exercise-box ol { margin-left: 20px; }
+        .nav-footer { display: flex; justify-content: space-between; margin-top: 40px; padding-bottom: 40px; }
+        .nav-link { text-decoration: none; color: var(--primary); font-weight: 600; padding: 12px 24px; border-radius: 10px; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: all 0.3s; }
+        .nav-link:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        ul, ol { margin: 10px 0 15px 25px; }
+        li { margin-bottom: 8px; }
+        @media (max-width: 768px) { .content-wrapper { padding: 0 15px; } .lesson-hero, .content-card { padding: 25px; } .lesson-hero h1 { font-size: 1.5em; } }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <a href="index.html" class="back-btn">&#x2B05; Voltar ao Dashboard</a>
+        <span class="page-badge">Cap&iacute;tulo 2 &mdash; Preparando o Ambiente</span>
+        <button class="slide-toggle" id="slideToggleBtn">&#x1F4FA; Modo Slide</button>
+    </div>
+
+    <div class="content-wrapper">
+        <div class="lesson-hero">
+            <h1>&#x1F4E6; Vari&aacute;veis e Atribui&ccedil;&atilde;o</h1>
+            <p class="subtitle">Se&ccedil;&atilde;o 2.6 &mdash; Guardando valores na mem&oacute;ria do computador</p>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x1F4E6; O que s&atilde;o vari&aacute;veis?</h2>
+            <p>Al&eacute;m de c&aacute;lculos simples, o interpretador tamb&eacute;m pode executar programas completos. Para isso, precisamos entender o conceito de <strong>vari&aacute;veis</strong>.</p>
+            <p>Na matem&aacute;tica, usamos inc&oacute;gnitas como <em>x</em> e <em>y</em>. Em programa&ccedil;&atilde;o, vari&aacute;veis funcionam de forma parecida: s&atilde;o <strong>nomes que d&atilde;o acesso a uma &aacute;rea da mem&oacute;ria</strong> do computador onde armazenamos dados.</p>
+            <p>Imagine a mem&oacute;ria como uma grande <strong>estante com compartimentos</strong>. Cada compartimento tem um nome. Para guardar algo, usamos o s&iacute;mbolo de igualdade (<code>=</code>). Chamamos isso de <strong>atribui&ccedil;&atilde;o</strong>: a vari&aacute;vel <em>recebe</em> um valor.</p>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x270D; Primeiro programa com vari&aacute;veis</h2>
+            <p>Observe este programa simples:</p>
+
+            <div class="code-block">
+                <span class="code-label">Listagem 2.7</span>
+a = <span class="number">2</span>         <span class="comment"># a recebe 2</span>
+b = <span class="number">3</span>         <span class="comment"># b recebe 3</span>
+<span class="function">print</span>(a + b)  <span class="comment"># exibe a soma</span>
+            </div>
+
+            <p><strong>Linha por linha:</strong></p>
+            <ul>
+                <li><code>a = 2</code> &mdash; Cria uma vari&aacute;vel chamada <code>a</code> e armazena o valor <code>2</code></li>
+                <li><code>b = 3</code> &mdash; Cria uma vari&aacute;vel chamada <code>b</code> e armazena o valor <code>3</code></li>
+                <li><code>print(a + b)</code> &mdash; Calcula <code>a + b</code> e exibe o resultado: <code>5</code></li>
+            </ul>
+
+            <p>Voc&ecirc; pode testar isso direto no interpretador:</p>
+
+            <div class="code-block">
+                <span class="code-label">IDLE</span>
+<span class="prompt">&gt;&gt;&gt;</span> a = <span class="number">2</span>
+<span class="prompt">&gt;&gt;&gt;</span> b = <span class="number">3</span>
+<span class="prompt">&gt;&gt;&gt;</span> <span class="function">print</span>(a + b)
+<span class="output">5</span>
+            </div>
+
+            <p>Note que as duas primeiras linhas n&atilde;o exibem nada na tela &mdash; elas apenas guardam os valores na mem&oacute;ria. S&oacute; o <code>print</code> mostra o resultado.</p>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x1F4B0; Exemplo pr&aacute;tico: aumento de sal&aacute;rio</h2>
+            <p>Vamos a um exemplo do mundo real. Calcular um aumento de 5% sobre um sal&aacute;rio de R$ 1500:</p>
+
+            <div class="code-block">
+                <span class="code-label">Listagem 2.11</span>
+sal&aacute;rio = <span class="number">1500</span>
+aumento = <span class="number">5</span>
+<span class="function">print</span>(sal&aacute;rio + (sal&aacute;rio * aumento / <span class="number">100</span>))
+            </div>
+
+            <div class="code-block">
+                <span class="code-label">Resultado</span>
+<span class="output">1575.0</span>
+            </div>
+
+            <p><strong>Por que usar vari&aacute;veis em vez de n&uacute;meros diretos?</strong></p>
+            <ul>
+                <li><strong>Clareza</strong> &mdash; <code>sal&aacute;rio</code> &eacute; mais leg&iacute;vel que <code>1500</code></li>
+                <li><strong>Flexibilidade</strong> &mdash; se o sal&aacute;rio mudar, basta alterar uma linha</li>
+                <li><strong>Menos erros</strong> &mdash; o valor aparece em um s&oacute; lugar, sem repeti&ccedil;&atilde;o</li>
+            </ul>
+
+            <p>Compare com a vers&atilde;o sem vari&aacute;veis:</p>
+
+            <div class="code-block">
+                <span class="code-label">Sem vari&aacute;veis</span>
+<span class="function">print</span>(<span class="number">1500</span> + (<span class="number">1500</span> * <span class="number">5</span> / <span class="number">100</span>))
+            </div>
+
+            <p>O resultado &eacute; o mesmo, mas se precisarmos mudar o sal&aacute;rio, teremos que alterar em <strong>dois lugares</strong> &mdash; aumentando a chance de esquecer um e ter resultado incorreto.</p>
+
+            <div class="highlight-box">
+                <p>&ldquo;Vari&aacute;veis s&atilde;o como c&eacute;lulas de uma planilha: voc&ecirc; pode referenci&aacute;-las v&aacute;rias vezes e, quando o valor muda, tudo se atualiza automaticamente.&rdquo;</p>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x1F4DD; Exerc&iacute;cios do Cap&iacute;tulo 2</h2>
+            <p>Pratique o que aprendeu! Tente resolver estes exerc&iacute;cios no IDLE:</p>
+
+            <div class="exercise-box">
+                <h3>&#x270F; Exerc&iacute;cio 2.1</h3>
+                <p>Converta as express&otilde;es matem&aacute;ticas abaixo para Python e calcule no interpretador:</p>
+                <ol>
+                    <li><code>10 + 20 + 30</code></li>
+                    <li><code>4 - 30</code></li>
+                    <li><code>(9 - 2) * 6 - 1</code></li>
+                </ol>
+            </div>
+
+            <div class="exercise-box">
+                <h3>&#x270F; Exerc&iacute;cio 2.2</h3>
+                <p>Digite a seguinte express&atilde;o no interpretador:</p>
+                <p><code>28 * 3 * 28 ** 2 + 1 - 10 * 4 / 2</code></p>
+                <p>Tente resolver tamb&eacute;m no papel, usando l&aacute;pis. A preced&ecirc;ncia importa!</p>
+            </div>
+
+            <div class="exercise-box">
+                <h3>&#x270F; Exerc&iacute;cio 2.3</h3>
+                <p>Fa&ccedil;a um programa que exiba <strong>seu nome</strong> na tela.</p>
+            </div>
+
+            <div class="exercise-box">
+                <h3>&#x270F; Exerc&iacute;cio 2.4</h3>
+                <p>Escreva um programa que exiba o resultado de <strong>2a &times; 3b</strong>, onde <em>a</em> vale 3 e <em>b</em> vale 5.</p>
+            </div>
+
+            <div class="exercise-box">
+                <h3>&#x270F; Exerc&iacute;cio 2.5</h3>
+                <p>Modifique o primeiro programa (Listagem 2.7) para calcular a soma de <strong>tr&ecirc;s</strong> vari&aacute;veis.</p>
+            </div>
+
+            <div class="exercise-box">
+                <h3>&#x270F; Exerc&iacute;cio 2.6</h3>
+                <p>Modifique o programa de aumento de sal&aacute;rio (Listagem 2.11) para calcular um aumento de <strong>15%</strong> sobre um sal&aacute;rio de <strong>R$ 750</strong>.</p>
+            </div>
+        </div>
+
+        <div class="nav-footer">
+            <a href="cap2-04-primeiros-programas.html" class="nav-link">&#x2B05; Anterior</a>
+            <a href="index.html" class="nav-link">Voltar ao Dashboard &#x1F3E0;</a>
+        </div>
+    </div>
+
+    <script src="slide-mode.js"></script>
+</body>
+</html>
