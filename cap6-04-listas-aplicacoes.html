@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aula 6.4 - Aplicações com Listas</title>
+    <link rel="stylesheet" href="slide-mode.css">
+    <style>
+        :root { --primary: #306998; --secondary: #FFD43B; --bg-light: #f4f7fe; --text-dark: #2d3748; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-light); color: var(--text-dark); line-height: 1.7; }
+        .top-bar { background: white; padding: 15px 30px; display: flex; align-items: center; gap: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 10; }
+        .back-btn { text-decoration: none; color: var(--primary); font-weight: 600; display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; transition: background 0.3s; }
+        .back-btn:hover { background: rgba(48,105,152,0.08); }
+        .page-badge { font-size: 0.8em; padding: 4px 12px; border-radius: 20px; background: rgba(8,145,178,0.12); color: #0891b2; font-weight: 600; }
+        .content-wrapper { max-width: 800px; margin: 40px auto; padding: 0 30px; }
+        .lesson-hero { background: white; border-radius: 16px; padding: 40px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        .lesson-hero h1 { font-size: 2em; margin-bottom: 10px; color: var(--primary); }
+        .lesson-hero .subtitle { font-size: 1.1em; color: #718096; }
+        .content-card { background: white; border-radius: 16px; padding: 35px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 25px; }
+        .content-card h2 { font-size: 1.4em; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .content-card p { margin-bottom: 15px; text-align: justify; }
+        .highlight-box { background: linear-gradient(135deg, rgba(48,105,152,0.05), rgba(255,212,59,0.1)); border-left: 4px solid var(--secondary); padding: 20px 25px; border-radius: 0 12px 12px 0; margin: 20px 0; }
+        .highlight-box p { margin-bottom: 0; font-style: italic; }
+        .code-block { background: #1e293b; color: #e2e8f0; padding: 20px 25px; border-radius: 12px; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.95em; margin: 15px 0; overflow-x: auto; position: relative; white-space: pre; }
+        .code-block .code-label { position: absolute; top: 8px; right: 12px; font-size: 0.75em; color: #64748b; font-family: 'Segoe UI', sans-serif; }
+        .code-block .keyword { color: #c084fc; }
+        .code-block .function { color: #93c5fd; }
+        .code-block .string { color: #86efac; }
+        .code-block .comment { color: #64748b; font-style: italic; }
+        .code-block .output { color: #fbbf24; }
+        .code-block .prompt { color: #64748b; }
+        .exercise-box { background: #f0fdf4; border: 2px solid #bbf7d0; border-radius: 12px; padding: 25px; margin: 20px 0; }
+        .exercise-box h3 { color: #166534; margin-bottom: 12px; font-size: 1.1em; }
+        .exercise-box p { margin-bottom: 8px; }
+        .nav-footer { display: flex; justify-content: space-between; margin-top: 40px; padding-bottom: 40px; }
+        .nav-link { text-decoration: none; color: var(--primary); font-weight: 600; padding: 12px 24px; border-radius: 10px; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: all 0.3s; }
+        .nav-link:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        ul, ol { margin: 10px 0 15px 25px; } li { margin-bottom: 8px; }
+        @media (max-width: 768px) { .content-wrapper { padding: 0 15px; } .lesson-hero, .content-card { padding: 25px; } .lesson-hero h1 { font-size: 1.5em; } }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <a href="index.html" class="back-btn">&#x2B05; Voltar ao Dashboard</a>
+        <span class="page-badge">Cap&iacute;tulo 6 &mdash; Listas</span>
+        <button class="slide-toggle" id="slideToggleBtn">&#x1F4FA; Modo Slide</button>
+    </div>
+    <div class="content-wrapper">
+        <div class="lesson-hero">
+            <h1>&#x1F6E0;&#xFE0F; Aplica&ccedil;&otilde;es com Listas</h1>
+            <p class="subtitle">Se&ccedil;&atilde;o 6.12&ndash;6.15 &mdash; Opera&ccedil;&otilde;es, strings e listas aninhadas</p>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x2699;&#xFE0F; 6.12 Opera&ccedil;&otilde;es com listas</h2>
+            <p>Podemos percorrer uma lista de forma a verificar o menor e o maior valor (Listagem 6.33). Utilizamos um pequeno truque, inicializando o m&aacute;ximo com o valor do primeiro elemento. Precisamos de um valor para m&aacute;ximo antes de utiliz&aacute;-lo na compara&ccedil;&atilde;o com <code>if</code>. Se us&aacute;ssemos 0, n&atilde;o ter&iacute;amos problema, desde que nossa lista n&atilde;o tenha valores negativos.</p>
+            <div class="code-block"><span class="code-label">Listagem 6.33 &mdash; Verifica&ccedil;&atilde;o de maior valor</span>v=[7,2,4]
+m&aacute;ximo=v[0]
+<span class="keyword">for</span> e <span class="keyword">in</span> v:
+    <span class="keyword">if</span> e &gt; m&aacute;ximo:
+        m&aacute;ximo = e
+<span class="function">print</span>(m&aacute;ximo)</div>
+            <div class="exercise-box">
+                <h3>Exerc&iacute;cio 6.12</h3>
+                <p>Altere o programa da listagem 6.33 de forma a imprimir o menor elemento da lista.</p>
+            </div>
+            <div class="exercise-box">
+                <h3>Exerc&iacute;cio 6.13</h3>
+                <p>A lista de temperaturas de Mons, na B&eacute;lgica, foi armazenada na lista <code>T = [-10, -8, 0, 1, 2.5, -2, -4]</code>. Fa&ccedil;a um programa que imprima a menor e a maior temperatura, assim como a temperatura m&eacute;dia.</p>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x1F3AC; 6.13 Aplica&ccedil;&otilde;es</h2>
+            <p>Vejamos uma situa&ccedil;&atilde;o na qual temos que selecionar os elementos de uma lista de forma a copi&aacute;-los para duas listas. Para simplificar o problema, imagine que os valores estejam inicialmente na lista <code>V</code>, mas que devem ser copiados para <code>P</code> se forem pares, ou para <code>I</code> se forem &iacute;mpares (Listagem 6.34):</p>
+            <div class="code-block"><span class="code-label">Listagem 6.34 &mdash; C&oacute;pia de elementos para outras listas</span>V=[5,8,7,12,8,13,21]
+P=[]
+I=[]
+<span class="keyword">for</span> e <span class="keyword">in</span> V:
+    <span class="keyword">if</span> e % 2 == 0:
+        P.append(e)
+    <span class="keyword">else</span>:
+        I.append(e)
+<span class="function">print</span>(<span class="string">"Pares: "</span>, P)
+<span class="function">print</span>(<span class="string">"&Iacute;mpares: "</span>, I)</div>
+            <p>Vejamos agora um programa que controla a utiliza&ccedil;&atilde;o das salas de um cinema. Imagine que a lista <code>salas = [10,2,1,3,0]</code> contenha o n&uacute;mero de lugares vagos nas salas 1, 2, 3, 4 e 5, respectivamente. Esse programa ler&aacute; o n&uacute;mero da sala e a quantidade de lugares solicitados. Ele deve informar se &eacute; poss&iacute;vel vender o n&uacute;mero de bilhetes, atualizar&aacute; o n&uacute;mero de lugares livres e caso seja poss&iacute;vel vender, digitar 0 encerra o programa (Listagem 6.35):</p>
+            <div class="code-block"><span class="code-label">Listagem 6.35 &mdash; Controle da utiliza&ccedil;&atilde;o de salas de um cinema</span>lugares_vagos=[10,2,1,3,0]
+<span class="keyword">while</span> <span class="keyword">True</span>:
+    sala=<span class="function">int</span>(<span class="function">input</span>(<span class="string">"Sala (0 sai): "</span>))
+    <span class="keyword">if</span> sala == 0:
+        <span class="function">print</span>(<span class="string">"Fim"</span>)
+        <span class="keyword">break</span>
+    <span class="keyword">if</span> sala&gt;<span class="function">len</span>(lugares_vagos) <span class="keyword">or</span> sala&lt;1:
+        <span class="function">print</span>(<span class="string">"Sala inv&aacute;lida"</span>)
+    <span class="keyword">elif</span> lugares_vagos[sala-1]==0:
+        <span class="function">print</span>(<span class="string">"Desculpe, sala lotada!"</span>)
+    <span class="keyword">else</span>:
+        lugares=<span class="function">int</span>(<span class="function">input</span>(<span class="string">"Quantos lugares voc&ecirc; deseja (%d vagos):"</span> % lugares_vagos[sala-1]))
+        <span class="keyword">if</span> lugares &gt; lugares_vagos[sala-1]:
+            <span class="function">print</span>(<span class="string">"Esse n&uacute;mero de lugares n&atilde;o est&aacute; dispon&iacute;vel."</span>)
+        <span class="keyword">elif</span> lugares &lt; 0:
+            <span class="function">print</span>(<span class="string">"N&uacute;mero inv&aacute;lido"</span>)
+        <span class="keyword">else</span>:
+            lugares_vagos[sala-1]-=lugares
+            <span class="function">print</span>(<span class="string">"%d lugares vendidos"</span> % lugares)
+    <span class="function">print</span>(<span class="string">"Utiliza&ccedil;&atilde;o das salas"</span>)
+    <span class="keyword">for</span> x,l <span class="keyword">in</span> <span class="function">enumerate</span>(lugares_vagos):
+        <span class="function">print</span>(<span class="string">"Sala %d - %d lugar(es) vazio(s)"</span> % (x+1, l))</div>
+            <div class="highlight-box">
+                <p>&#x1F4A1; Note que usamos <code>enumerate</code> para imprimir a utiliza&ccedil;&atilde;o das salas, combinando &iacute;ndice e valor em um &uacute;nico <code>for</code>. O &iacute;ndice <code>x</code> come&ccedil;a em 0, por isso usamos <code>x+1</code> para exibir o n&uacute;mero da sala corretamente.</p>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x1F4DD; 6.14 Listas com strings</h2>
+            <p>No cap&iacute;tulo 3 vimos que strings podem ser indexadas ou acessadas letra por letra. Listas em Python funcionam da mesma forma, permitindo o acesso a v&aacute;rios valores e se tornando uma das principais estruturas de programa&ccedil;&atilde;o da linguagem. Vejamos outro exemplo de listas, mas utilizando strings, na Listagem 6.36:</p>
+            <div class="code-block"><span class="code-label">Listagem 6.36 &mdash; Listas com strings</span><span class="prompt">&gt;&gt;&gt;</span> S=[<span class="string">"ma&ccedil;&atilde;s"</span>, <span class="string">"peras"</span>, <span class="string">"kiwis"</span>]
+<span class="prompt">&gt;&gt;&gt;</span> <span class="function">print</span>(<span class="function">len</span>(S))
+<span class="output">3</span>
+<span class="prompt">&gt;&gt;&gt;</span> <span class="function">print</span>(S[0])
+<span class="output">ma&ccedil;&atilde;s</span>
+<span class="prompt">&gt;&gt;&gt;</span> <span class="function">print</span>(S[1])
+<span class="output">peras</span>
+<span class="prompt">&gt;&gt;&gt;</span> <span class="function">print</span>(S[2])
+<span class="output">kiwis</span></div>
+            <p>O programa da Listagem 6.37 l&ecirc; e imprime uma lista de compras at&eacute; que seja digitado <code>"fim"</code>:</p>
+            <div class="code-block"><span class="code-label">Listagem 6.37 &mdash; Lendo e imprimindo uma lista de compras</span>compras=[]
+<span class="keyword">while</span> <span class="keyword">True</span>:
+    produto=<span class="function">input</span>(<span class="string">"Produto:"</span>)
+    <span class="keyword">if</span> produto == <span class="string">"fim"</span>:
+        <span class="keyword">break</span>
+    compras.append(produto)
+<span class="keyword">for</span> p <span class="keyword">in</span> compras:
+    <span class="function">print</span>(p)</div>
+            <p>Um fator interessante &eacute; que podemos acessar as strings dentro da lista, letra por letra, usando um segundo &iacute;ndice. Vejamos as Listagens 6.38 e 6.39:</p>
+            <div class="code-block"><span class="code-label">Listagem 6.38 &mdash; Listas com strings, acessando letras</span><span class="prompt">&gt;&gt;&gt;</span> S=[<span class="string">"ma&ccedil;&atilde;s"</span>, <span class="string">"peras"</span>, <span class="string">"kiwis"</span>]
+<span class="prompt">&gt;&gt;&gt;</span> <span class="function">print</span>(S[0][0])
+<span class="output">m</span>
+<span class="prompt">&gt;&gt;&gt;</span> <span class="function">print</span>(S[0][1])
+<span class="output">a</span>
+<span class="prompt">&gt;&gt;&gt;</span> <span class="function">print</span>(S[1][1])
+<span class="output">e</span>
+<span class="prompt">&gt;&gt;&gt;</span> <span class="function">print</span>(S[2][2])
+<span class="output">w</span></div>
+            <div class="code-block"><span class="code-label">Listagem 6.39 &mdash; Impress&atilde;o de uma lista de strings, letra a letra</span>L=[<span class="string">"ma&ccedil;&atilde;s"</span>, <span class="string">"peras"</span>, <span class="string">"kiwis"</span>]
+<span class="keyword">for</span> s <span class="keyword">in</span> L:
+    <span class="keyword">for</span> letra <span class="keyword">in</span> s:
+        <span class="function">print</span>(letra)</div>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x1F5C2;&#xFE0F; 6.15 Listas dentro de listas</h2>
+            <p>Isso nos leva a outra vantagem das listas em Python: listas dentro de listas. Como b&ocirc;nus, temos tamb&eacute;m que os elementos de uma lista n&atilde;o precisam ser do mesmo tipo. Vejamos um exemplo onde ter&iacute;amos uma lista de compras na Listagem 6.40. O primeiro elemento seria o nome do produto; o segundo, a quantidade; e o terceiro, seu pre&ccedil;o.</p>
+            <div class="code-block"><span class="code-label">Listagem 6.40 &mdash; Listas com elementos de tipos diferentes</span>produto1 = [ <span class="string">"ma&ccedil;&atilde;"</span>, 10, 0.30]
+produto2 = [ <span class="string">"pera"</span>, 5, 0.75]
+produto3 = [ <span class="string">"kiwi"</span>, 4, 0.98]</div>
+            <p>Assim, <code>produto1</code>, <code>produto2</code>, <code>produto3</code> seriam tr&ecirc;s listas com tr&ecirc;s elementos cada uma. Observe que o primeiro elemento &eacute; do tipo string; o segundo, do tipo inteiro; e o terceiro, do tipo ponto flutuante (<em>float</em>)! Vejamos agora outra lista na Listagem 6.41:</p>
+            <div class="code-block"><span class="code-label">Listagem 6.41 &mdash; Listas de listas</span>produto1 = [ <span class="string">"ma&ccedil;&atilde;"</span>, 10, 0.30]
+produto2 = [ <span class="string">"pera"</span>, 5, 0.75]
+produto3 = [ <span class="string">"kiwi"</span>, 4, 0.98]
+compras = [ produto1, produto2, produto3]
+<span class="function">print</span>(compras)</div>
+            <p>Agora temos uma lista chamada <code>compras</code>, tamb&eacute;m com tr&ecirc;s elementos, mas cada elemento &eacute; uma lista &agrave; parte. Para imprimir essa lista, ter&iacute;amos o programa da Listagem 6.42:</p>
+            <div class="code-block"><span class="code-label">Listagem 6.42 &mdash; Impress&atilde;o das compras</span>produto1 = [<span class="string">"ma&ccedil;&atilde;"</span>, 10, 0.30]
+produto2 = [<span class="string">"pera"</span>, 5, 0.75]
+produto3 = [<span class="string">"kiwi"</span>, 4, 0.98]
+compras = [ produto1, produto2, produto3]
+<span class="keyword">for</span> e <span class="keyword">in</span> compras:
+    <span class="function">print</span>(<span class="string">"Produto: %s"</span> % e[0])
+    <span class="function">print</span>(<span class="string">"Quantidade: %d"</span> % e[1])
+    <span class="function">print</span>(<span class="string">"Pre&ccedil;o: %5.2f"</span> % e[2])</div>
+            <p>Da mesma forma, poder&iacute;amos ter acessado o pre&ccedil;o do segundo elemento com <code>compras[1][2]</code>. Vejamos agora um programa completo, capaz de perguntar nome do produto, quantidade e pre&ccedil;o e, no final, imprimir uma lista de compras completa (Listagem 6.43):</p>
+            <div class="code-block"><span class="code-label">Listagem 6.43 &mdash; Cria&ccedil;&atilde;o e impress&atilde;o da lista de compras</span>compras = [ ]
+<span class="keyword">while</span> <span class="keyword">True</span>:
+    produto = <span class="function">input</span>(<span class="string">"Produto: "</span>)
+    <span class="keyword">if</span> produto == <span class="string">"fim"</span>:
+        <span class="keyword">break</span>
+    quantidade = <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Quantidade: "</span>))
+    pre&ccedil;o = <span class="function">float</span>(<span class="function">input</span>(<span class="string">"Pre&ccedil;o: "</span>))
+    compras.append([produto, quantidade, pre&ccedil;o])
+soma = 0.0
+<span class="keyword">for</span> e <span class="keyword">in</span> compras:
+    <span class="function">print</span>(<span class="string">"%20s x%5d %5.2f %6.2f"</span> % (e[0],
+        e[1],e[2],
+        e[1] * e[2]))
+    soma += e[1] * e[2]
+<span class="function">print</span>(<span class="string">"Total: %7.2f"</span> % soma)</div>
+            <div class="highlight-box">
+                <p>&#x1F4A1; Listas dentro de listas s&atilde;o chamadas de listas aninhadas ou matrizes. Elas s&atilde;o fundamentais para representar tabelas, grades, imagens e muitas outras estruturas de dados bidimensionais em programas reais.</p>
+            </div>
+        </div>
+
+        <div class="nav-footer">
+            <a href="cap6-03-listas-iteracao.html" class="nav-link">&#x2B05; Anterior: Pesquisa e for</a>
+            <a href="cap6-05-ordenacao-dicionarios.html" class="nav-link">Pr&oacute;xima: Ordena&ccedil;&atilde;o e Dicion&aacute;rios &#x27A1;</a>
+        </div>
+    </div>
+    <script src="slide-mode.js"></script>
+</body>
+</html>

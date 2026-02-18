@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aula 6.5 - Ordenação, Dicionários e Tuplas</title>
+    <link rel="stylesheet" href="slide-mode.css">
+    <style>
+        :root { --primary: #306998; --secondary: #FFD43B; --bg-light: #f4f7fe; --text-dark: #2d3748; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-light); color: var(--text-dark); line-height: 1.7; }
+        .top-bar { background: white; padding: 15px 30px; display: flex; align-items: center; gap: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 10; }
+        .back-btn { text-decoration: none; color: var(--primary); font-weight: 600; display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; transition: background 0.3s; }
+        .back-btn:hover { background: rgba(48,105,152,0.08); }
+        .page-badge { font-size: 0.8em; padding: 4px 12px; border-radius: 20px; background: rgba(8,145,178,0.12); color: #0891b2; font-weight: 600; }
+        .content-wrapper { max-width: 800px; margin: 40px auto; padding: 0 30px; }
+        .lesson-hero { background: white; border-radius: 16px; padding: 40px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        .lesson-hero h1 { font-size: 2em; margin-bottom: 10px; color: var(--primary); }
+        .lesson-hero .subtitle { font-size: 1.1em; color: #718096; }
+        .content-card { background: white; border-radius: 16px; padding: 35px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 25px; }
+        .content-card h2 { font-size: 1.4em; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .content-card p { margin-bottom: 15px; text-align: justify; }
+        .highlight-box { background: linear-gradient(135deg, rgba(48,105,152,0.05), rgba(255,212,59,0.1)); border-left: 4px solid var(--secondary); padding: 20px 25px; border-radius: 0 12px 12px 0; margin: 20px 0; }
+        .highlight-box p { margin-bottom: 0; font-style: italic; }
+        .code-block { background: #1e293b; color: #e2e8f0; padding: 20px 25px; border-radius: 12px; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.95em; margin: 15px 0; overflow-x: auto; position: relative; white-space: pre; }
+        .code-block .code-label { position: absolute; top: 8px; right: 12px; font-size: 0.75em; color: #64748b; font-family: 'Segoe UI', sans-serif; }
+        .code-block .keyword { color: #c084fc; }
+        .code-block .function { color: #93c5fd; }
+        .code-block .string { color: #86efac; }
+        .code-block .comment { color: #64748b; font-style: italic; }
+        .code-block .output { color: #fbbf24; }
+        .code-block .prompt { color: #64748b; }
+        .exercise-box { background: #f0fdf4; border: 2px solid #bbf7d0; border-radius: 12px; padding: 25px; margin: 20px 0; }
+        .exercise-box h3 { color: #166534; margin-bottom: 12px; font-size: 1.1em; }
+        .exercise-box p { margin-bottom: 8px; }
+        .nav-footer { display: flex; justify-content: space-between; margin-top: 40px; padding-bottom: 40px; }
+        .nav-link { text-decoration: none; color: var(--primary); font-weight: 600; padding: 12px 24px; border-radius: 10px; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: all 0.3s; }
+        .nav-link:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        ul, ol { margin: 10px 0 15px 25px; } li { margin-bottom: 8px; }
+        @media (max-width: 768px) { .content-wrapper { padding: 0 15px; } .lesson-hero, .content-card { padding: 25px; } .lesson-hero h1 { font-size: 1.5em; } }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <a href="index.html" class="back-btn">&#x2B05; Voltar ao Dashboard</a>
+        <span class="page-badge">Cap&iacute;tulo 6 &mdash; Listas</span>
+        <button class="slide-toggle" id="slideToggleBtn">&#x1F4FA; Modo Slide</button>
+    </div>
+    <div class="content-wrapper">
+        <div class="lesson-hero">
+            <h1>&#x1F4CA; Ordena&ccedil;&atilde;o, Dicion&aacute;rios e Tuplas</h1>
+            <p class="subtitle">Se&ccedil;&atilde;o 6.16&ndash;6.19 &mdash; Bubble Sort, dicion&aacute;rios e tuplas</p>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x1FAE7; 6.16 Ordena&ccedil;&atilde;o</h2>
+            <p>At&eacute; agora, os elementos de nossas listas aparecem na mesma ordem em que foram digitados, sem qualquer ordena&ccedil;&atilde;o. Para ordenar uma lista, realizaremos uma opera&ccedil;&atilde;o semelhante &agrave; da pesquisa, mas trocando a ordem dos elementos quando necess&aacute;rio. Um algoritmo muito simples de ordena&ccedil;&atilde;o &eacute; o <strong>Bubble Sort</strong> (m&eacute;todo das bolhas).</p>
+            <p>A ordena&ccedil;&atilde;o pelo m&eacute;todo das bolhas consiste em comparar dois elementos a cada vez. Se o valor do primeiro elemento for maior que o do segundo, eles trocam de posi&ccedil;&atilde;o. Essa opera&ccedil;&atilde;o &eacute; repetida para o pr&oacute;ximo elemento at&eacute; o fim da lista. Utilizaremos um marcador para saber se chegamos ao fim da lista trocando ou n&atilde;o algum elemento &mdash; essa propriedade garante que o maior elemento v&aacute; para a &uacute;ltima posi&ccedil;&atilde;o da lista, ou seja, sua posi&ccedil;&atilde;o correta. Isso permite eliminar um elemento do fim da lista a cada passagem completa.</p>
+            <div class="code-block"><span class="code-label">Listagem 6.44 &mdash; Ordena&ccedil;&atilde;o pelo m&eacute;todo das bolhas</span>L=[7,4,3,12,8]
+fim=5
+<span class="keyword">while</span> fim &gt; 1:
+    trocou=<span class="keyword">False</span>
+    x=0
+    <span class="keyword">while</span> x&lt;(fim-1):
+        <span class="keyword">if</span> L[x] &gt; L[x+1]:
+            trocou=<span class="keyword">True</span>
+            temp=L[x]
+            L[x]=L[x+1]
+            L[x+1]=temp
+        x+=1
+    <span class="keyword">if</span> <span class="keyword">not</span> trocou:
+        <span class="keyword">break</span>
+    fim-=1
+<span class="keyword">for</span> e <span class="keyword">in</span> L:
+    <span class="function">print</span>(e)</div>
+            <p>A troca de valores entre duas vari&aacute;veis utiliza uma vari&aacute;vel auxiliar tempor&aacute;ria (<code>temp</code>) para armazenar o valor de uma delas durante a troca &mdash; como trocar o conte&uacute;do de duas x&iacute;caras usando uma terceira. Quando nenhuma troca acontece em uma passagem completa (<code>not trocou</code>), a lista j&aacute; est&aacute; ordenada e o algoritmo termina com <code>break</code>.</p>
+            <div class="exercise-box">
+                <h3>Exerc&iacute;cio 6.14</h3>
+                <p>O que acontece quando a lista j&aacute; est&aacute; ordenada? Rastreie o programa da Listagem 6.44, mas com a lista <code>L=[1,2,3,4,5]</code>.</p>
+            </div>
+            <div class="exercise-box">
+                <h3>Exerc&iacute;cio 6.15</h3>
+                <p>O que acontece quando dois valores s&atilde;o iguais? Rastreie o programa da listagem 6.44, mas com a lista <code>L=[3,3,1,5,4]</code>.</p>
+            </div>
+            <div class="exercise-box">
+                <h3>Exerc&iacute;cio 6.16</h3>
+                <p>Modifique o programa da listagem 6.44 para ordenar a lista em ordem decrescente. <code>L=[1,2,3,4,5]</code> deve ser ordenada como <code>L=[5,4,3,2,1]</code>.</p>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x1F4D6; 6.17 Dicion&aacute;rios</h2>
+            <p>Dicion&aacute;rios consistem em uma estrutura de dados similar &agrave;s listas, mas com propriedades de acesso diferentes. Um dicion&aacute;rio &eacute; composto por um conjunto de chaves e valores. O dicion&aacute;rio em si consiste em relacionar uma chave a um valor espec&iacute;fico.</p>
+            <p>Em Python, criamos dicion&aacute;rios utilizando chaves (<code>{}</code>). Cada elemento do dicion&aacute;rio &eacute; uma combina&ccedil;&atilde;o de chave e valor. Vejamos um exemplo onde os pre&ccedil;os de mercadorias seguem a tabela a seguir:</p>
+            <div class="code-block"><span class="code-label">Listagem 6.45 &mdash; Cria&ccedil;&atilde;o de um dicion&aacute;rio</span>tabela = { <span class="string">"Alface"</span>: 0.45,
+           <span class="string">"Batata"</span>: 1.20,
+           <span class="string">"Tomate"</span>: 2.30,
+           <span class="string">"Feij&atilde;o"</span>: 1.50 }</div>
+            <p>Um dicion&aacute;rio &eacute; acessado por suas chaves. Para obter o pre&ccedil;o da alface, digitamos no interpretador <code>tabela["Alface"]</code>. Diferentemente de listas, onde o &iacute;ndice &eacute; um n&uacute;mero, dicion&aacute;rios utilizam suas chaves como &iacute;ndice. Quando atribu&iacute;mos um valor a uma chave, duas coisas podem ocorrer: (1) se a chave j&aacute; existe, o valor associado &eacute; alterado; (2) se a chave n&atilde;o existe, a nova chave ser&aacute; adicionada ao dicion&aacute;rio.</p>
+            <div class="code-block"><span class="code-label">Listagem 6.46 &mdash; Funcionamento do dicion&aacute;rio</span><span class="prompt">&gt;&gt;&gt;</span> tabela = { <span class="string">"Alface"</span>: 0.45,
+<span class="prompt">...</span>            <span class="string">"Batata"</span>: 1.20,
+<span class="prompt">...</span>            <span class="string">"Tomate"</span>: 2.30,
+<span class="prompt">...</span>            <span class="string">"Feij&atilde;o"</span>: 1.50 }
+<span class="prompt">&gt;&gt;&gt;</span> <span class="function">print</span>(tabela[<span class="string">"Tomate"</span>])
+<span class="output">2.3</span>
+<span class="prompt">&gt;&gt;&gt;</span> <span class="function">print</span>(tabela)
+<span class="output">{'Batata': 1.2, 'Alface': 0.45, 'Tomate': 2.3, 'Feij&atilde;o': 1.5}</span>
+<span class="prompt">&gt;&gt;&gt;</span> tabela[<span class="string">"Tomate"</span>] = 2.50
+<span class="prompt">&gt;&gt;&gt;</span> <span class="function">print</span>(tabela[<span class="string">"Tomate"</span>])
+<span class="output">2.5</span>
+<span class="prompt">&gt;&gt;&gt;</span> tabela[<span class="string">"Cebola"</span>] = 1.20
+<span class="prompt">&gt;&gt;&gt;</span> <span class="function">print</span>(tabela)
+<span class="output">{'Batata': 1.2, 'Alface': 0.45, 'Tomate': 2.5, 'Cebola': 1.2, 'Feij&atilde;o': 1.5}</span></div>
+            <p>Outra diferen&ccedil;a entre dicion&aacute;rios e listas &eacute; que, ao utilizarmos dicion&aacute;rios, perdemos a no&ccedil;&atilde;o de ordem. Se a chave n&atilde;o existir, uma exce&ccedil;&atilde;o do tipo <code>KeyError</code> ser&aacute; ativada (Listagem 6.47):</p>
+            <div class="code-block"><span class="code-label">Listagem 6.47 &mdash; Acesso a uma chave inexistente</span><span class="prompt">&gt;&gt;&gt;</span> tabela = { <span class="string">"Alface"</span>: 0.45,
+<span class="prompt">...</span>            <span class="string">"Batata"</span>: 1.20,
+<span class="prompt">...</span>            <span class="string">"Tomate"</span>: 2.30,
+<span class="prompt">...</span>            <span class="string">"Feij&atilde;o"</span>: 1.50 }
+<span class="prompt">&gt;&gt;&gt;</span> <span class="function">print</span>(tabela[<span class="string">"Manga"</span>])
+<span class="output">Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+KeyError: 'Manga'</span></div>
+            <p>Para verificar se uma chave pertence ao dicion&aacute;rio, podemos usar o operador <code>in</code>. Para obter uma lista das chaves ou valores associados, usamos os m&eacute;todos <code>.keys()</code> e <code>.values()</code> (Listagens 6.48 e 6.49):</p>
+            <div class="code-block"><span class="code-label">Listagem 6.48 &mdash; Verifica&ccedil;&atilde;o da exist&ecirc;ncia de uma chave</span><span class="prompt">&gt;&gt;&gt;</span> tabela = { <span class="string">"Alface"</span>: 0.45,
+<span class="prompt">...</span>            <span class="string">"Batata"</span>: 1.20,
+<span class="prompt">...</span>            <span class="string">"Tomate"</span>: 2.30,
+<span class="prompt">...</span>            <span class="string">"Feij&atilde;o"</span>: 1.50 }
+<span class="prompt">&gt;&gt;&gt;</span> <span class="function">print</span>(<span class="string">"Manga"</span> <span class="keyword">in</span> tabela)
+<span class="output">False</span>
+<span class="prompt">&gt;&gt;&gt;</span> <span class="function">print</span>(<span class="string">"Batata"</span> <span class="keyword">in</span> tabela)
+<span class="output">True</span></div>
+            <div class="code-block"><span class="code-label">Listagem 6.49 &mdash; Obten&ccedil;&atilde;o de uma lista de chaves e valores</span><span class="prompt">&gt;&gt;&gt;</span> tabela = { <span class="string">"Alface"</span>: 0.45,
+<span class="prompt">...</span>            <span class="string">"Batata"</span>: 1.20,
+<span class="prompt">...</span>            <span class="string">"Tomate"</span>: 2.30,
+<span class="prompt">...</span>            <span class="string">"Feij&atilde;o"</span>: 1.50 }
+<span class="prompt">&gt;&gt;&gt;</span> <span class="function">print</span>(tabela.keys())
+<span class="output">dict_keys(['Batata', 'Alface', 'Tomate', 'Feij&atilde;o'])</span>
+<span class="prompt">&gt;&gt;&gt;</span> <span class="function">print</span>(tabela.values())
+<span class="output">dict_values([1.2, 0.45, 2.3, 1.5])</span></div>
+            <p>Observe que os m&eacute;todos <code>keys()</code> e <code>values()</code> retornam geradores. Voc&ecirc; pode utiliz&aacute;-los diretamente dentro de um <code>for</code> ou transform&aacute;-los em lista usando a fun&ccedil;&atilde;o <code>list</code>. Vejamos um programa que utiliza dicion&aacute;rios para exibir o pre&ccedil;o de um produto (Listagem 6.50):</p>
+            <div class="code-block"><span class="code-label">Listagem 6.50 &mdash; Obten&ccedil;&atilde;o do pre&ccedil;o com um dicion&aacute;rio</span>tabela = { <span class="string">"Alface"</span>: 0.45,
+           <span class="string">"Batata"</span>: 1.20,
+           <span class="string">"Tomate"</span>: 2.30,
+           <span class="string">"Feij&atilde;o"</span>: 1.50 }
+<span class="keyword">while</span> <span class="keyword">True</span>:
+    produto=<span class="function">input</span>(<span class="string">"Digite o nome do produto, fim para terminar:"</span>)
+    <span class="keyword">if</span> produto == <span class="string">"fim"</span>:
+        <span class="keyword">break</span>
+    <span class="keyword">if</span> produto <span class="keyword">in</span> tabela:
+        <span class="function">print</span>(<span class="string">"Pre&ccedil;o %5.2f"</span> % tabela[produto])
+    <span class="keyword">else</span>:
+        <span class="function">print</span>(<span class="string">"Produto n&atilde;o encontrado!"</span>)</div>
+            <p>Para apagar uma chave, utilizaremos a instru&ccedil;&atilde;o <code>del</code> (Listagem 6.51):</p>
+            <div class="code-block"><span class="code-label">Listagem 6.51 &mdash; Exclus&atilde;o de uma associa&ccedil;&atilde;o do dicion&aacute;rio</span><span class="prompt">&gt;&gt;&gt;</span> tabela = { <span class="string">"Alface"</span>: 0.45,
+<span class="prompt">...</span>            <span class="string">"Batata"</span>: 1.20,
+<span class="prompt">...</span>            <span class="string">"Tomate"</span>: 2.30,
+<span class="prompt">...</span>            <span class="string">"Feij&atilde;o"</span>: 1.50 }
+<span class="prompt">&gt;&gt;&gt;</span> <span class="keyword">del</span> tabela[<span class="string">"Tomate"</span>]
+<span class="prompt">&gt;&gt;&gt;</span> <span class="function">print</span>(tabela)
+<span class="output">{'Batata': 1.2, 'Alface': 0.45, 'Feij&atilde;o': 1.5}</span></div>
+            <div class="highlight-box">
+                <p>&#x1F4A1; Quando usar dicion&aacute;rios vs. listas? Se seus dados s&atilde;o acessados por suas chaves (nomes, c&oacute;digos), quase nunca voc&ecirc; precisa acessa-los por &iacute;ndice num&eacute;rico e voc&ecirc; precisa pesquisar rapidamente, um dicion&aacute;rio &eacute; mais interessante. Listas preservam a ordem de inser&ccedil;&atilde;o e s&atilde;o melhores quando &iacute;ndices num&eacute;ricos s&atilde;o necess&aacute;rios.</p>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x1F5C4;&#xFE0F; 6.18 Dicion&aacute;rios com listas</h2>
+            <p>Em Python, podemos ter dicion&aacute;rios nos quais as chaves s&atilde;o associadas a listas ou mesmo a outros dicion&aacute;rios. Imagine uma rela&ccedil;&atilde;o de estoque de mercadorias onde, al&eacute;m do pre&ccedil;o, a quantidade em estoque (Listagem 6.52):</p>
+            <div class="code-block"><span class="code-label">Listagem 6.52 &mdash; Dicion&aacute;rio com listas</span>estoque = { <span class="string">"tomate"</span>: [ 1000, 2.30],
+            <span class="string">"alface"</span>: [ 500, 0.45],
+            <span class="string">"batata"</span>: [ 2001, 1.20],
+            <span class="string">"feij&atilde;o"</span>: [ 100, 1.50] }</div>
+            <p>Nesse caso, o nome do produto &eacute; a chave, e a lista consiste nos valores associados a essa chave. O primeiro elemento da lista &eacute; a quantidade dispon&iacute;vel; o segundo, o pre&ccedil;o do produto. Uma aplica&ccedil;&atilde;o mais completa processa uma lista de opera&ccedil;&otilde;es e calcula o pre&ccedil;o total de vendas, atualizando tamb&eacute;m a quantidade em estoque (Listagem 6.53):</p>
+            <div class="code-block"><span class="code-label">Listagem 6.53 &mdash; Dicion&aacute;rio com estoque e opera&ccedil;&otilde;es de venda</span>estoque = { <span class="string">"tomate"</span>: [ 1000, 2.30],
+            <span class="string">"alface"</span>: [ 500, 0.45],
+            <span class="string">"batata"</span>: [ 2001, 1.20],
+            <span class="string">"feij&atilde;o"</span>: [ 100, 1.50] }
+venda = [ [<span class="string">"tomate"</span>, 5], [<span class="string">"batata"</span>, 10], [<span class="string">"alface"</span>,5] ]
+total = 0
+<span class="function">print</span>(<span class="string">"Vendas:\n"</span>)
+<span class="keyword">for</span> opera&ccedil;&atilde;o <span class="keyword">in</span> venda:
+    produto, quantidade = opera&ccedil;&atilde;o
+    pre&ccedil;o = estoque[produto][1]
+    custo = pre&ccedil;o * quantidade
+    <span class="function">print</span>(<span class="string">"%12s: %3d x %6.2f = %6.2f"</span> %
+          (produto, quantidade,pre&ccedil;o,custo))
+    estoque[produto][0] -= quantidade
+    total+=custo
+<span class="function">print</span>(<span class="string">" Custo total: %21.2f\n"</span> % total)
+<span class="function">print</span>(<span class="string">"Estoque:\n"</span>)
+<span class="keyword">for</span> chave, dados <span class="keyword">in</span> estoque.items():
+    <span class="function">print</span>(<span class="string">"Descri&ccedil;&atilde;o: "</span>, chave)
+    <span class="function">print</span>(<span class="string">"Quantidade: "</span>, dados[0])
+    <span class="function">print</span>(<span class="string">"Pre&ccedil;o: %6.2f\n"</span> % dados[1])</div>
+            <p>Utilizamos uma opera&ccedil;&atilde;o de desempacotamento, como j&aacute; fizemos com <code>for</code> e <code>enumerate</code>. Como <code>opera&ccedil;&atilde;o</code> &eacute; uma lista com dois elementos, ao escrevermos <code>produto, quantidade = opera&ccedil;&atilde;o</code> temos o primeiro elemento de <code>opera&ccedil;&atilde;o</code> atribu&iacute;do a <code>produto</code>, e o segundo, a <code>quantidade</code>. Em seguida, utilizamos o conte&uacute;do de <code>produto</code> como chave no dicion&aacute;rio <code>estoque</code>. O m&eacute;todo <code>.items()</code> retorna pares de chave-valor como tuplas, permitindo percorrer todo o dicion&aacute;rio com <code>for</code>.</p>
+            <div class="exercise-box">
+                <h3>Exerc&iacute;cio 6.17</h3>
+                <p>Altere o programa da listagem 6.53 de forma a solicitar ao usu&aacute;rio o produto e a quantidade vendida. Verifique se o nome do produto digitado existe no dicion&aacute;rio, e s&oacute; ent&atilde;o efetue a baixa em estoque.</p>
+            </div>
+            <div class="exercise-box">
+                <h3>Exerc&iacute;cio 6.18</h3>
+                <p>Escreva um programa que gere um dicion&aacute;rio, onde cada chave seja um caractere, e seu valor seja o n&uacute;mero desse caractere encontrado em uma frase lida. Exemplo: <code>O rato -&gt; { "O":1, "r":1, "a":1, "t":1, "o":1}</code></p>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x1F4E6; 6.19 Tuplas</h2>
+            <p>Tuplas podem ser vistas como listas em Python, com a grande diferen&ccedil;a de serem imut&aacute;veis. Tuplas s&atilde;o ideais para representar listas de valores constantes e tamb&eacute;m para realizar opera&ccedil;&otilde;es de empacotamento e desempacotamento de valores.</p>
+            <p>Tuplas s&atilde;o criadas de forma semelhante &agrave;s listas, mas utilizamos par&ecirc;nteses em vez de colchetes. Tuplas suportam a maior parte das opera&ccedil;&otilde;es de lista, como fatiamento e indexa&ccedil;&atilde;o:</p>
+            <div class="code-block"><span class="prompt">&gt;&gt;&gt;</span> tupla = (<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>)
+<span class="prompt">&gt;&gt;&gt;</span> tupla
+<span class="output">('a', 'b', 'c')</span>
+<span class="prompt">&gt;&gt;&gt;</span> tupla[0]
+<span class="output">'a'</span>
+<span class="prompt">&gt;&gt;&gt;</span> tupla[2:]
+<span class="output">('b', 'c')</span>
+<span class="prompt">&gt;&gt;&gt;</span> tupla * 2
+<span class="output">('a', 'b', 'c', 'a', 'b', 'c')</span>
+<span class="prompt">&gt;&gt;&gt;</span> <span class="function">len</span>(tupla)
+<span class="output">3</span></div>
+            <p>Mas tuplas n&atilde;o podem ter seus elementos alterados. Veja o que acontece se tentarmos alterar uma tupla:</p>
+            <div class="code-block"><span class="prompt">&gt;&gt;&gt;</span> tupla[0]=<span class="string">"A"</span>
+<span class="output">Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+TypeError: 'tuple' object does not support item assignment</span></div>
+            <p>V&aacute;rias fun&ccedil;&otilde;es utilizam ou geram tuplas em Python. Tuplas podem ser utilizadas com <code>for</code>:</p>
+            <div class="code-block"><span class="prompt">&gt;&gt;&gt;</span> <span class="keyword">for</span> elemento <span class="keyword">in</span> tupla:
+<span class="prompt">...</span>     <span class="function">print</span>(elemento)
+<span class="output">a
+b
+c</span></div>
+            <p>Python tamb&eacute;m permite criar tuplas usando valores separados por v&iacute;rgula, independente de usarmos par&ecirc;nteses. Esse tipo de opera&ccedil;&atilde;o &eacute; chamado de empacotamento:</p>
+            <div class="code-block"><span class="prompt">&gt;&gt;&gt;</span> tupla = 100, 200, 300
+<span class="prompt">&gt;&gt;&gt;</span> tupla
+<span class="output">(100, 200, 300)</span></div>
+            <p>Tuplas tamb&eacute;m podem ser utilizadas para desempacotar valores. O primeiro valor, 10, foi atribu&iacute;do &agrave; primeira vari&aacute;vel, e 20 &agrave; segunda. Esse tipo de constru&ccedil;&atilde;o &eacute; interessante para distribuirmos o valor de uma s&oacute; tupla em v&aacute;rias vari&aacute;veis:</p>
+            <div class="code-block"><span class="prompt">&gt;&gt;&gt;</span> a, b = 10, 20
+<span class="prompt">&gt;&gt;&gt;</span> a
+<span class="output">10</span>
+<span class="prompt">&gt;&gt;&gt;</span> b
+<span class="output">20</span></div>
+            <p>Tamb&eacute;m podemos trocar rapidamente os valores de vari&aacute;veis com constru&ccedil;&otilde;es de uma tupla:</p>
+            <div class="code-block"><span class="prompt">&gt;&gt;&gt;</span> a, b = 10, 20
+<span class="prompt">&gt;&gt;&gt;</span> a, b = b, a
+<span class="prompt">&gt;&gt;&gt;</span> a
+<span class="output">20</span>
+<span class="prompt">&gt;&gt;&gt;</span> b
+<span class="output">10</span></div>
+            <p>A sintaxe do Python &eacute; um tanto especial quando precisamos criar tuplas com apenas um elemento. Como os valores s&atilde;o escritos entre par&ecirc;nteses, quando apenas um valor estiver presente, devemos acrescentar uma v&iacute;rgula ap&oacute;s o valor para indicar que o valor &eacute; uma tupla:</p>
+            <div class="code-block"><span class="prompt">&gt;&gt;&gt;</span> t1 = (1)
+<span class="prompt">&gt;&gt;&gt;</span> t1
+<span class="output">1</span>
+<span class="prompt">&gt;&gt;&gt;</span> t2 = (1,)
+<span class="prompt">&gt;&gt;&gt;</span> t2
+<span class="output">(1,)</span>
+<span class="prompt">&gt;&gt;&gt;</span> t3 = 1,
+<span class="prompt">&gt;&gt;&gt;</span> t3
+<span class="output">(1,)</span></div>
+            <p>Podemos tamb&eacute;m criar tuplas vazias, escrever apenas os par&ecirc;nteses, e tuplas a partir de listas usando a fun&ccedil;&atilde;o <code>tuple</code>:</p>
+            <div class="code-block"><span class="prompt">&gt;&gt;&gt;</span> t4 = ()
+<span class="prompt">&gt;&gt;&gt;</span> t4
+<span class="output">()</span>
+<span class="prompt">&gt;&gt;&gt;</span> <span class="function">len</span>(t4)
+<span class="output">0</span>
+<span class="prompt">&gt;&gt;&gt;</span> L = [1,2,3]
+<span class="prompt">&gt;&gt;&gt;</span> T = <span class="function">tuple</span>(L)
+<span class="prompt">&gt;&gt;&gt;</span> T
+<span class="output">(1, 2, 3)</span></div>
+            <p>Observe que se uma tupla contiver uma lista ou outro objeto que pode ser alterado, este continuar&aacute; a funcionar normalmente. Ou seja, a tupla em si &eacute; imut&aacute;vel, mas os objetos dentro dela podem ser alter&aacute;veis:</p>
+            <div class="code-block"><span class="prompt">&gt;&gt;&gt;</span> tupla=(<span class="string">'a'</span>, [<span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>])
+<span class="prompt">&gt;&gt;&gt;</span> <span class="function">len</span>(tupla)
+<span class="output">2</span>
+<span class="prompt">&gt;&gt;&gt;</span> tupla[1]
+<span class="output">['b', 'c', 'd']</span>
+<span class="prompt">&gt;&gt;&gt;</span> tupla[1].append(<span class="string">"e"</span>)
+<span class="prompt">&gt;&gt;&gt;</span> tupla
+<span class="output">('a', ['b', 'c', 'd', 'e'])</span></div>
+            <div class="highlight-box">
+                <p>&#x1F4A1; Neste caso, nada mudou na tupla em si, mas na lista que &eacute; seu segundo elemento. Ou seja, a tupla n&atilde;o foi alterada, mas a lista que ela continha, sim. As tuplas s&atilde;o amplamente utilizadas em Python para retornar m&uacute;ltiplos valores de fun&ccedil;&otilde;es e para desempacotamento de dados.</p>
+            </div>
+        </div>
+
+        <div class="nav-footer">
+            <a href="cap6-04-listas-aplicacoes.html" class="nav-link">&#x2B05; Anterior: Aplica&ccedil;&otilde;es com Listas</a>
+            <a href="index.html" class="nav-link">&#x1F3E0; Voltar ao Dashboard &#x27A1;</a>
+        </div>
+    </div>
+    <script src="slide-mode.js"></script>
+</body>
+</html>

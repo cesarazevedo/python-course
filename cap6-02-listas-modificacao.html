@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aula 6.2 - Adição, Remoção, Filas e Pilhas</title>
+    <link rel="stylesheet" href="slide-mode.css">
+    <style>
+        :root { --primary: #306998; --secondary: #FFD43B; --bg-light: #f4f7fe; --text-dark: #2d3748; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-light); color: var(--text-dark); line-height: 1.7; }
+        .top-bar { background: white; padding: 15px 30px; display: flex; align-items: center; gap: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 10; }
+        .back-btn { text-decoration: none; color: var(--primary); font-weight: 600; display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; transition: background 0.3s; }
+        .back-btn:hover { background: rgba(48,105,152,0.08); }
+        .page-badge { font-size: 0.8em; padding: 4px 12px; border-radius: 20px; background: rgba(8,145,178,0.12); color: #0891b2; font-weight: 600; }
+        .content-wrapper { max-width: 800px; margin: 40px auto; padding: 0 30px; }
+        .lesson-hero { background: white; border-radius: 16px; padding: 40px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        .lesson-hero h1 { font-size: 2em; margin-bottom: 10px; color: var(--primary); }
+        .lesson-hero .subtitle { font-size: 1.1em; color: #718096; }
+        .content-card { background: white; border-radius: 16px; padding: 35px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 25px; }
+        .content-card h2 { font-size: 1.4em; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .content-card p { margin-bottom: 15px; text-align: justify; }
+        .highlight-box { background: linear-gradient(135deg, rgba(48,105,152,0.05), rgba(255,212,59,0.1)); border-left: 4px solid var(--secondary); padding: 20px 25px; border-radius: 0 12px 12px 0; margin: 20px 0; }
+        .highlight-box p { margin-bottom: 0; font-style: italic; }
+        .code-block { background: #1e293b; color: #e2e8f0; padding: 20px 25px; border-radius: 12px; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.95em; margin: 15px 0; overflow-x: auto; position: relative; white-space: pre; }
+        .code-block .code-label { position: absolute; top: 8px; right: 12px; font-size: 0.75em; color: #64748b; font-family: 'Segoe UI', sans-serif; }
+        .code-block .keyword { color: #c084fc; }
+        .code-block .function { color: #93c5fd; }
+        .code-block .string { color: #86efac; }
+        .code-block .comment { color: #64748b; font-style: italic; }
+        .code-block .output { color: #fbbf24; }
+        .code-block .prompt { color: #64748b; }
+        .exercise-box { background: #f0fdf4; border: 2px solid #bbf7d0; border-radius: 12px; padding: 25px; margin: 20px 0; }
+        .exercise-box h3 { color: #166534; margin-bottom: 12px; font-size: 1.1em; }
+        .exercise-box p { margin-bottom: 8px; }
+        .nav-footer { display: flex; justify-content: space-between; margin-top: 40px; padding-bottom: 40px; }
+        .nav-link { text-decoration: none; color: var(--primary); font-weight: 600; padding: 12px 24px; border-radius: 10px; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: all 0.3s; }
+        .nav-link:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        ul, ol { margin: 10px 0 15px 25px; } li { margin-bottom: 8px; }
+        @media (max-width: 768px) { .content-wrapper { padding: 0 15px; } .lesson-hero, .content-card { padding: 25px; } .lesson-hero h1 { font-size: 1.5em; } }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <a href="index.html" class="back-btn">&#x2B05; Voltar ao Dashboard</a>
+        <span class="page-badge">Cap&iacute;tulo 6 &mdash; Listas</span>
+        <button class="slide-toggle" id="slideToggleBtn">&#x1F4FA; Modo Slide</button>
+    </div>
+    <div class="content-wrapper">
+        <div class="lesson-hero">
+            <h1>&#x1F4E5; Adi&ccedil;&atilde;o, Remo&ccedil;&atilde;o, Filas e Pilhas</h1>
+            <p class="subtitle">Se&ccedil;&atilde;o 6.4&ndash;6.7 &mdash; Modificando listas e estruturas de dados cl&aacute;ssicas</p>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x2795; 6.4 Adi&ccedil;&atilde;o de elementos</h2>
+            <p>Uma das principais vantagens de trabalharmos com listas &eacute; poder adicionar novos elementos durante a execu&ccedil;&atilde;o. Para adicionar um elemento ao fim da lista, chamamos o m&eacute;todo <code>append</code>:</p>
+            <div class="code-block"><span class="code-label">Listagem 6.14 &mdash; Adi&ccedil;&atilde;o de elementos &agrave; lista</span><span class="prompt">&gt;&gt;&gt;</span> L = []
+<span class="prompt">&gt;&gt;&gt;</span> L.append(<span class="string">"a"</span>)
+<span class="prompt">&gt;&gt;&gt;</span> L
+<span class="output">['a']</span>
+<span class="prompt">&gt;&gt;&gt;</span> L.append(<span class="string">"b"</span>)
+<span class="prompt">&gt;&gt;&gt;</span> L
+<span class="output">['a', 'b']</span>
+<span class="prompt">&gt;&gt;&gt;</span> L.append(<span class="string">"c"</span>)
+<span class="prompt">&gt;&gt;&gt;</span> L
+<span class="output">['a', 'b', 'c']</span>
+<span class="prompt">&gt;&gt;&gt;</span> <span class="function">len</span>(L)
+<span class="output">3</span></div>
+            <p>Um programa simples capaz de ler um n&uacute;mero indeterminado de valores e imprimi-los na mesma ordem:</p>
+            <div class="code-block"><span class="code-label">Listagem 6.15 &mdash; Adi&ccedil;&atilde;o de elementos &agrave; lista</span>L = []
+<span class="keyword">while</span> <span class="keyword">True</span>:
+    n = <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Digite um n&uacute;mero (0 sai):"</span>))
+    <span class="keyword">if</span> n == 0:
+        <span class="keyword">break</span>
+    L.append(n)
+x = 0
+<span class="keyword">while</span> x &lt; <span class="function">len</span>(L):
+    <span class="function">print</span>(L[x])
+    x = x + 1</div>
+            <p>Outra forma de adicionar elementos &eacute; com a opera&ccedil;&atilde;o <code>+</code> entre listas. O m&eacute;todo <code>extend</code> adiciona todos os elementos de uma lista a outra; j&aacute; <code>append</code> com uma lista como par&acirc;metro adiciona a lista inteira como um &uacute;nico elemento:</p>
+            <div class="code-block"><span class="code-label">Listagem 6.16 &mdash; Adi&ccedil;&atilde;o de listas</span><span class="prompt">&gt;&gt;&gt;</span> L = []
+<span class="prompt">&gt;&gt;&gt;</span> L = L + [1]
+<span class="prompt">&gt;&gt;&gt;</span> L
+<span class="output">[1]</span>
+<span class="prompt">&gt;&gt;&gt;</span> L += [2]
+<span class="prompt">&gt;&gt;&gt;</span> L
+<span class="output">[1, 2]</span>
+<span class="prompt">&gt;&gt;&gt;</span> L += [3, 4, 5]
+<span class="prompt">&gt;&gt;&gt;</span> L
+<span class="output">[1, 2, 3, 4, 5]</span></div>
+            <div class="code-block"><span class="code-label">Listagem 6.17 &mdash; Adi&ccedil;&atilde;o de elementos e listas</span><span class="prompt">&gt;&gt;&gt;</span> L = [<span class="string">"a"</span>]
+<span class="prompt">&gt;&gt;&gt;</span> L.append(<span class="string">"b"</span>)
+<span class="prompt">&gt;&gt;&gt;</span> L.extend([<span class="string">"c"</span>])
+<span class="prompt">&gt;&gt;&gt;</span> L
+<span class="output">['a', 'b', 'c']</span>
+<span class="prompt">&gt;&gt;&gt;</span> L.append([<span class="string">"d"</span>, <span class="string">"e"</span>])
+<span class="prompt">&gt;&gt;&gt;</span> L
+<span class="output">['a', 'b', 'c', ['d', 'e']]</span>
+<span class="prompt">&gt;&gt;&gt;</span> L.extend([<span class="string">"f"</span>, <span class="string">"g"</span>, <span class="string">"h"</span>])
+<span class="prompt">&gt;&gt;&gt;</span> L
+<span class="output">['a', 'b', 'c', ['d', 'e'], 'f', 'g', 'h']</span></div>
+            <div class="code-block"><span class="code-label">Listagem 6.18 &mdash; Adi&ccedil;&atilde;o de elementos e listas com append</span><span class="prompt">&gt;&gt;&gt;</span> L = [<span class="string">"a"</span>]
+<span class="prompt">&gt;&gt;&gt;</span> L.append([<span class="string">"b"</span>])
+<span class="prompt">&gt;&gt;&gt;</span> L.append([<span class="string">"c"</span>, <span class="string">"d"</span>])
+<span class="prompt">&gt;&gt;&gt;</span> <span class="function">len</span>(L)
+<span class="output">3</span>
+<span class="prompt">&gt;&gt;&gt;</span> L[1]
+<span class="output">['b']</span>
+<span class="prompt">&gt;&gt;&gt;</span> L[2]
+<span class="output">['c', 'd']</span>
+<span class="prompt">&gt;&gt;&gt;</span> L[2][1]
+<span class="output">'d'</span></div>
+            <div class="exercise-box">
+                <h3>Exerc&iacute;cio 6.2</h3>
+                <p>Fa&ccedil;a um programa que leia duas listas e que gere uma terceira com os elementos das duas primeiras.</p>
+            </div>
+            <div class="exercise-box">
+                <h3>Exerc&iacute;cio 6.3</h3>
+                <p>Fa&ccedil;a um programa que percorra duas listas e gere uma terceira sem elementos repetidos.</p>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x274C; 6.5 Remo&ccedil;&atilde;o de elementos</h2>
+            <p>Como o tamanho da lista pode variar, podemos tamb&eacute;m retirar alguns elementos ou mesmo todos eles. Para isso, utilizamos a instru&ccedil;&atilde;o <code>del</code>. O elemento exclu&iacute;do n&atilde;o ocupa mais lugar na lista, fazendo com que os &iacute;ndices sejam reorganizados:</p>
+            <div class="code-block"><span class="code-label">Listagem 6.19 &mdash; Remo&ccedil;&atilde;o de elementos</span><span class="prompt">&gt;&gt;&gt;</span> L = [<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>]
+<span class="prompt">&gt;&gt;&gt;</span> <span class="keyword">del</span> L[1]
+<span class="prompt">&gt;&gt;&gt;</span> L
+<span class="output">['a', 'c']</span>
+<span class="prompt">&gt;&gt;&gt;</span> <span class="keyword">del</span> L[0]
+<span class="prompt">&gt;&gt;&gt;</span> L
+<span class="output">['c']</span></div>
+            <p>Podemos apagar fatias inteiras de uma s&oacute; vez:</p>
+            <div class="code-block"><span class="code-label">Listagem 6.20 &mdash; Remo&ccedil;&atilde;o de fatias</span><span class="prompt">&gt;&gt;&gt;</span> L = <span class="function">list</span>(<span class="function">range</span>(101))
+<span class="prompt">&gt;&gt;&gt;</span> <span class="keyword">del</span> L[1:99]
+<span class="prompt">&gt;&gt;&gt;</span> L
+<span class="output">[0, 99, 100]</span></div>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x1F3E6; 6.6 Usando listas como filas</h2>
+            <p>Uma lista pode ser utilizada como <strong>fila</strong> (FIFO &mdash; First In First Out): a inser&ccedil;&atilde;o &eacute; sempre realizada no fim e as remo&ccedil;&otilde;es s&atilde;o feitas no in&iacute;cio. O m&eacute;todo <code>pop(0)</code> retorna o valor do primeiro elemento e o exclui da lista:</p>
+            <div class="code-block"><span class="code-label">Listagem 6.21 &mdash; Simula&ccedil;&atilde;o de uma fila de banco</span>&uacute;ltimo = 10
+fila = <span class="function">list</span>(<span class="function">range</span>(1, &uacute;ltimo + 1))
+<span class="keyword">while</span> <span class="keyword">True</span>:
+    <span class="function">print</span>(<span class="string">"\nExistem %d clientes na fila"</span> % <span class="function">len</span>(fila))
+    <span class="function">print</span>(<span class="string">"Fila atual:"</span>, fila)
+    <span class="function">print</span>(<span class="string">"Digite F para adicionar um cliente ao fim da fila,"</span>)
+    <span class="function">print</span>(<span class="string">"Ou A para realizar o atendimento. S para sair."</span>)
+    opera&ccedil;&atilde;o = <span class="function">input</span>(<span class="string">"Opera&ccedil;&atilde;o (F, A ou S):"</span>)
+    <span class="keyword">if</span> opera&ccedil;&atilde;o == <span class="string">"A"</span>:
+        <span class="keyword">if</span> <span class="function">len</span>(fila) &gt; 0:
+            atendido = fila.pop(0)
+            <span class="function">print</span>(<span class="string">"Cliente %d atendido"</span> % atendido)
+        <span class="keyword">else</span>:
+            <span class="function">print</span>(<span class="string">"Fila vazia! Ningu&eacute;m para atender."</span>)
+    <span class="keyword">elif</span> opera&ccedil;&atilde;o == <span class="string">"F"</span>:
+        &uacute;ltimo += 1
+        fila.append(&uacute;ltimo)
+    <span class="keyword">elif</span> opera&ccedil;&atilde;o == <span class="string">"S"</span>:
+        <span class="keyword">break</span>
+    <span class="keyword">else</span>:
+        <span class="function">print</span>(<span class="string">"Opera&ccedil;&atilde;o inv&aacute;lida! Digite apenas F, A ou S!"</span>)</div>
+            <div class="exercise-box">
+                <h3>Exerc&iacute;cio 6.4</h3>
+                <p>O que acontece quando n&atilde;o verificamos se a lista est&aacute; vazia antes de chamarmos o m&eacute;todo <code>pop</code>?</p>
+            </div>
+            <div class="exercise-box">
+                <h3>Exerc&iacute;cio 6.5</h3>
+                <p>Altere o programa da Listagem 6.21 de forma a poder trabalhar com v&aacute;rios comandos digitados de uma s&oacute; vez. Altere-o de forma a considerar opera&ccedil;&atilde;o como uma string. Exemplo: <code>FFFAAAS</code> significaria tr&ecirc;s chegadas de novos clientes, tr&ecirc;s atendimentos e, finalmente, a sa&iacute;da do programa.</p>
+            </div>
+            <div class="exercise-box">
+                <h3>Exerc&iacute;cio 6.6</h3>
+                <p>Modifique o programa para trabalhar com duas filas. Para facilitar seu trabalho, considere o comando <code>A</code> para atendimento da fila 1 e <code>B</code> para atendimento da fila 2. O mesmo para a chegada de clientes: <code>F</code> para fila 1 e <code>G</code> para fila 2.</p>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x1F375; 6.7 Uso de listas como pilhas</h2>
+            <p>Uma <strong>pilha</strong> tem uma pol&iacute;tica de acesso bem definida: novos elementos s&atilde;o adicionados ao topo e a retirada tamb&eacute;m &eacute; feita pelo topo (LIFO &mdash; Last In First Out). O m&eacute;todo <code>pop(-1)</code> retira o &uacute;ltimo elemento:</p>
+            <div class="code-block"><span class="code-label">Listagem 6.22 &mdash; Pilha de pratos</span>prato = 5
+pilha = <span class="function">list</span>(<span class="function">range</span>(1, prato + 1))
+<span class="keyword">while</span> <span class="keyword">True</span>:
+    <span class="function">print</span>(<span class="string">"\nExistem %d pratos na pilha"</span> % <span class="function">len</span>(pilha))
+    <span class="function">print</span>(<span class="string">"Pilha atual:"</span>, pilha)
+    <span class="function">print</span>(<span class="string">"Digite E para empilhar um novo prato,"</span>)
+    <span class="function">print</span>(<span class="string">"ou D para desempilhar. S para sair."</span>)
+    opera&ccedil;&atilde;o = <span class="function">input</span>(<span class="string">"Opera&ccedil;&atilde;o (E, D ou S):"</span>)
+    <span class="keyword">if</span> opera&ccedil;&atilde;o == <span class="string">"D"</span>:
+        <span class="keyword">if</span> <span class="function">len</span>(pilha) &gt; 0:
+            lavado = pilha.pop(-1)
+            <span class="function">print</span>(<span class="string">"Prato %d lavado"</span> % lavado)
+        <span class="keyword">else</span>:
+            <span class="function">print</span>(<span class="string">"Pilha vazia! Nada para lavar."</span>)
+    <span class="keyword">elif</span> opera&ccedil;&atilde;o == <span class="string">"E"</span>:
+        prato += 1
+        pilha.append(prato)
+    <span class="keyword">elif</span> opera&ccedil;&atilde;o == <span class="string">"S"</span>:
+        <span class="keyword">break</span>
+    <span class="keyword">else</span>:
+        <span class="function">print</span>(<span class="string">"Opera&ccedil;&atilde;o inv&aacute;lida! Digite apenas E, D ou S!"</span>)</div>
+            <div class="highlight-box">
+                <p>&#x1F4A1; Filas e pilhas s&atilde;o estruturas de dados fundamentais na ci&ecirc;ncia da computa&ccedil;&atilde;o. Filas (FIFO) s&atilde;o usadas em sistemas de impress&atilde;o e atendimento. Pilhas (LIFO) s&atilde;o usadas em hist&oacute;rico de navega&ccedil;&atilde;o e fun&ccedil;&otilde;es de desfazer.</p>
+            </div>
+            <div class="exercise-box">
+                <h3>Exerc&iacute;cio 6.7</h3>
+                <p>Fa&ccedil;a um programa que leia uma express&atilde;o com par&ecirc;nteses. Usando pilhas, verifique se os par&ecirc;nteses foram abertos e fechados na ordem correta. Exemplos: <code>(())</code> OK, <code>()()()()</code> OK, <code>())</code> Erro.</p>
+            </div>
+        </div>
+
+        <div class="nav-footer">
+            <a href="cap6-01-listas-intro.html" class="nav-link">&#x2B05; Anterior: Introdu&ccedil;&atilde;o &agrave;s Listas</a>
+            <a href="cap6-03-listas-iteracao.html" class="nav-link">Pr&oacute;xima: Pesquisa e for &#x27A1;</a>
+        </div>
+    </div>
+    <script src="slide-mode.js"></script>
+</body>
+</html>

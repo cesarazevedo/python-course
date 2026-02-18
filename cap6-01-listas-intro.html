@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aula 6.1 - Introdução às Listas</title>
+    <link rel="stylesheet" href="slide-mode.css">
+    <style>
+        :root { --primary: #306998; --secondary: #FFD43B; --bg-light: #f4f7fe; --text-dark: #2d3748; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-light); color: var(--text-dark); line-height: 1.7; }
+        .top-bar { background: white; padding: 15px 30px; display: flex; align-items: center; gap: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 10; }
+        .back-btn { text-decoration: none; color: var(--primary); font-weight: 600; display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; transition: background 0.3s; }
+        .back-btn:hover { background: rgba(48,105,152,0.08); }
+        .page-badge { font-size: 0.8em; padding: 4px 12px; border-radius: 20px; background: rgba(8,145,178,0.12); color: #0891b2; font-weight: 600; }
+        .content-wrapper { max-width: 800px; margin: 40px auto; padding: 0 30px; }
+        .lesson-hero { background: white; border-radius: 16px; padding: 40px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        .lesson-hero h1 { font-size: 2em; margin-bottom: 10px; color: var(--primary); }
+        .lesson-hero .subtitle { font-size: 1.1em; color: #718096; }
+        .content-card { background: white; border-radius: 16px; padding: 35px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 25px; }
+        .content-card h2 { font-size: 1.4em; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .content-card p { margin-bottom: 15px; text-align: justify; }
+        .highlight-box { background: linear-gradient(135deg, rgba(48,105,152,0.05), rgba(255,212,59,0.1)); border-left: 4px solid var(--secondary); padding: 20px 25px; border-radius: 0 12px 12px 0; margin: 20px 0; }
+        .highlight-box p { margin-bottom: 0; font-style: italic; }
+        .code-block { background: #1e293b; color: #e2e8f0; padding: 20px 25px; border-radius: 12px; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.95em; margin: 15px 0; overflow-x: auto; position: relative; white-space: pre; }
+        .code-block .code-label { position: absolute; top: 8px; right: 12px; font-size: 0.75em; color: #64748b; font-family: 'Segoe UI', sans-serif; }
+        .code-block .keyword { color: #c084fc; }
+        .code-block .function { color: #93c5fd; }
+        .code-block .string { color: #86efac; }
+        .code-block .comment { color: #64748b; font-style: italic; }
+        .code-block .output { color: #fbbf24; }
+        .code-block .prompt { color: #64748b; }
+        .exercise-box { background: #f0fdf4; border: 2px solid #bbf7d0; border-radius: 12px; padding: 25px; margin: 20px 0; }
+        .exercise-box h3 { color: #166534; margin-bottom: 12px; font-size: 1.1em; }
+        .exercise-box p { margin-bottom: 8px; }
+        .nav-footer { display: flex; justify-content: space-between; margin-top: 40px; padding-bottom: 40px; }
+        .nav-link { text-decoration: none; color: var(--primary); font-weight: 600; padding: 12px 24px; border-radius: 10px; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: all 0.3s; }
+        .nav-link:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        ul, ol { margin: 10px 0 15px 25px; } li { margin-bottom: 8px; }
+        @media (max-width: 768px) { .content-wrapper { padding: 0 15px; } .lesson-hero, .content-card { padding: 25px; } .lesson-hero h1 { font-size: 1.5em; } }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <a href="index.html" class="back-btn">&#x2B05; Voltar ao Dashboard</a>
+        <span class="page-badge">Cap&iacute;tulo 6 &mdash; Listas</span>
+        <button class="slide-toggle" id="slideToggleBtn">&#x1F4FA; Modo Slide</button>
+    </div>
+    <div class="content-wrapper">
+        <div class="lesson-hero">
+            <h1>&#x1F4CB; Introdu&ccedil;&atilde;o &agrave;s Listas</h1>
+            <p class="subtitle">Se&ccedil;&atilde;o 6.0&ndash;6.3 &mdash; Criando, acessando, copiando e medindo listas</p>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x1F3E2; O que &eacute; uma lista?</h2>
+            <p>Listas s&atilde;o um tipo de vari&aacute;vel que permite o armazenamento de v&aacute;rios valores, acessados por um &iacute;ndice. Uma lista pode conter zero ou mais elementos de um mesmo tipo ou de tipos diversos, podendo inclusive conter outras listas. O tamanho de uma lista &eacute; igual &agrave; quantidade de elementos que ela cont&eacute;m.</p>
+            <p>Podemos imaginar uma lista como um edif&iacute;cio de apartamentos: o &iacute;ndice &eacute; o andar, o zero &eacute; o t&eacute;rreo, o primeiro andar &eacute; o 1, e assim por diante. A lista mais simples &eacute; a lista vazia:</p>
+            <div class="code-block"><span class="code-label">Listagem 6.1 &mdash; Uma lista vazia</span>L = []</div>
+            <p>Os colchetes <code>[]</code> ap&oacute;s o s&iacute;mbolo de igualdade indicam que <code>L</code> &eacute; uma lista. Vejamos como criar uma lista <code>Z</code> com 3 elementos:</p>
+            <div class="code-block"><span class="code-label">Listagem 6.2 &mdash; Uma lista com tr&ecirc;s elementos</span>Z = [15, 8, 9]</div>
+            <p>A lista <code>Z</code> foi criada com tr&ecirc;s elementos: 15, 8 e 9. O tamanho da lista &eacute; 3. O primeiro elemento tem &iacute;ndice 0, portanto o &uacute;ltimo elemento &eacute; <code>Z[2]</code>. Veja como acessar e modificar elementos no interpretador:</p>
+            <div class="code-block"><span class="code-label">Listagem 6.3 &mdash; Acesso a uma lista</span><span class="prompt">&gt;&gt;&gt;</span> Z = [15, 8, 9]
+<span class="prompt">&gt;&gt;&gt;</span> Z[0]
+<span class="output">15</span>
+<span class="prompt">&gt;&gt;&gt;</span> Z[1]
+<span class="output">8</span>
+<span class="prompt">&gt;&gt;&gt;</span> Z[2]
+<span class="output">9</span></div>
+            <div class="code-block"><span class="code-label">Listagem 6.4 &mdash; Modifica&ccedil;&atilde;o de uma lista</span><span class="prompt">&gt;&gt;&gt;</span> Z = [15, 8, 9]
+<span class="prompt">&gt;&gt;&gt;</span> Z[0]
+<span class="output">15</span>
+<span class="prompt">&gt;&gt;&gt;</span> Z[0] = 7
+<span class="prompt">&gt;&gt;&gt;</span> Z[0]
+<span class="output">7</span>
+<span class="prompt">&gt;&gt;&gt;</span> Z
+<span class="output">[7, 8, 9]</span></div>
+            <p>A lista permite calcular a m&eacute;dia de notas sem precisar de cinco vari&aacute;veis separadas. No programa abaixo, <code>notas</code> &eacute; um acumulador indexado:</p>
+            <div class="code-block"><span class="code-label">Listagem 6.5 &mdash; C&aacute;lculo da m&eacute;dia</span>notas = [6, 7, 5, 8, 9]
+soma = 0
+x = 0
+<span class="keyword">while</span> x &lt; 5:
+    soma += notas[x]
+    x += 1
+<span class="function">print</span>(<span class="string">"M&eacute;dia: %5.2f"</span> % (soma / 5))</div>
+            <p>Uma modifica&ccedil;&atilde;o interessante &eacute; ler as notas do usu&aacute;rio e armazen&aacute;-las na lista durante a execu&ccedil;&atilde;o:</p>
+            <div class="code-block"><span class="code-label">Listagem 6.6 &mdash; C&aacute;lculo da m&eacute;dia com notas digitadas</span>notas = [0, 0, 0, 0, 0]
+soma = 0
+x = 0
+<span class="keyword">while</span> x &lt; 5:
+    notas[x] = <span class="function">float</span>(<span class="function">input</span>(<span class="string">"Nota %d: "</span> % x))
+    soma += notas[x]
+    x += 1
+x = 0
+<span class="keyword">while</span> x &lt; 5:
+    <span class="function">print</span>(<span class="string">"Nota %d: %6.2f"</span> % (x, notas[x]))
+    x += 1
+<span class="function">print</span>(<span class="string">"M&eacute;dia: %5.2f"</span> % (soma / 5))</div>
+            <div class="highlight-box">
+                <p>&#x1F4A1; A grande vantagem desse programa foi n&atilde;o precisar declarar cinco vari&aacute;veis para guardar as cinco notas. Todas foram armazenadas na lista, utilizando um &iacute;ndice para identificar ou acessar cada valor.</p>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x1F522; 6.1 Trabalhando com &iacute;ndices</h2>
+            <p>Podemos trabalhar com &iacute;ndices de forma din&acirc;mica. No exemplo abaixo, o programa l&ecirc; cinco n&uacute;meros, armazena-os em uma lista e depois solicita que o usu&aacute;rio escolha qual posi&ccedil;&atilde;o deseja ver. Observe que adicionamos 1 a <code>x</code> na entrada para que o usu&aacute;rio veja &ldquo;N&uacute;mero 1&rdquo; em vez de &ldquo;N&uacute;mero 0&rdquo;:</p>
+            <div class="code-block"><span class="code-label">Listagem 6.7 &mdash; Apresenta&ccedil;&atilde;o de n&uacute;meros</span>n&uacute;meros = [0, 0, 0, 0, 0]
+x = 0
+<span class="keyword">while</span> x &lt; 5:
+    n&uacute;meros[x] = <span class="function">int</span>(<span class="function">input</span>(<span class="string">"N&uacute;mero %d: "</span> % (x + 1)))
+    x += 1
+<span class="keyword">while</span> <span class="keyword">True</span>:
+    escolhido = <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Que posi&ccedil;&atilde;o voc&ecirc; quer imprimir (0 para sair): "</span>))
+    <span class="keyword">if</span> escolhido == 0:
+        <span class="keyword">break</span>
+    <span class="function">print</span>(<span class="string">"Voc&ecirc; escolheu o n&uacute;mero: %d"</span> % (n&uacute;meros[escolhido - 1]))</div>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x2702; 6.2 C&oacute;pia e fatiamento de listas</h2>
+            <p>Um efeito colateral importante das listas aparece ao tentar copi&aacute;-las. Em Python, uma lista &eacute; um objeto e, ao atribuirmos um objeto a outro, estamos apenas copiando a mesma <em>refer&ecirc;ncia</em> &mdash; n&atilde;o os dados em si:</p>
+            <div class="code-block"><span class="code-label">Listagem 6.8 &mdash; Tentativa de copiar listas</span><span class="prompt">&gt;&gt;&gt;</span> L = [1, 2, 3, 4, 5]
+<span class="prompt">&gt;&gt;&gt;</span> V = L
+<span class="prompt">&gt;&gt;&gt;</span> V[0] = 6
+<span class="prompt">&gt;&gt;&gt;</span> L
+<span class="output">[6, 2, 3, 4, 5]</span>
+<span class="prompt">&gt;&gt;&gt;</span> V
+<span class="output">[6, 2, 3, 4, 5]</span></div>
+            <p>Ao modificarmos <code>V</code>, modificamos tamb&eacute;m <code>L</code>, pois ambas referenciam a mesma lista na mem&oacute;ria. Para criar uma c&oacute;pia independente, utilizamos <code>L[:]</code>:</p>
+            <div class="code-block"><span class="code-label">Listagem 6.9 &mdash; C&oacute;pia de listas</span><span class="prompt">&gt;&gt;&gt;</span> L = [1, 2, 3, 4, 5]
+<span class="prompt">&gt;&gt;&gt;</span> V = L[:]
+<span class="prompt">&gt;&gt;&gt;</span> V[0] = 6
+<span class="prompt">&gt;&gt;&gt;</span> L
+<span class="output">[1, 2, 3, 4, 5]</span>
+<span class="prompt">&gt;&gt;&gt;</span> V
+<span class="output">[6, 2, 3, 4, 5]</span></div>
+            <p>Ao escrevermos <code>L[:]</code>, estamos nos referindo a uma nova c&oacute;pia de <code>L</code>. &Iacute;ndices negativos tamb&eacute;m funcionam &mdash; <code>L[-1]</code> &eacute; o &uacute;ltimo elemento, <code>L[-2]</code> o pen&uacute;ltimo:</p>
+            <div class="code-block"><span class="code-label">Listagem 6.10 &mdash; Fatiamento de listas</span><span class="prompt">&gt;&gt;&gt;</span> L = [1, 2, 3, 4, 5]
+<span class="prompt">&gt;&gt;&gt;</span> L[0:5]
+<span class="output">[1, 2, 3, 4, 5]</span>
+<span class="prompt">&gt;&gt;&gt;</span> L[:5]
+<span class="output">[1, 2, 3, 4, 5]</span>
+<span class="prompt">&gt;&gt;&gt;</span> L[:-1]
+<span class="output">[1, 2, 3, 4]</span>
+<span class="prompt">&gt;&gt;&gt;</span> L[1:3]
+<span class="output">[2, 3]</span>
+<span class="prompt">&gt;&gt;&gt;</span> L[3:]
+<span class="output">[4, 5]</span>
+<span class="prompt">&gt;&gt;&gt;</span> L[-1]
+<span class="output">5</span>
+<span class="prompt">&gt;&gt;&gt;</span> L[-2]
+<span class="output">4</span></div>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x1F4CF; 6.3 Tamanho de listas</h2>
+            <p>Podemos usar a fun&ccedil;&atilde;o <code>len</code> com listas. O valor retornado &eacute; igual ao n&uacute;mero de elementos da lista:</p>
+            <div class="code-block"><span class="code-label">Listagem 6.11 &mdash; Tamanho de listas</span><span class="prompt">&gt;&gt;&gt;</span> L = [22, 8, 5]
+<span class="prompt">&gt;&gt;&gt;</span> <span class="function">len</span>(L)
+<span class="output">3</span>
+<span class="prompt">&gt;&gt;&gt;</span> W = []
+<span class="prompt">&gt;&gt;&gt;</span> <span class="function">len</span>(W)
+<span class="output">0</span></div>
+            <p>A fun&ccedil;&atilde;o <code>len</code> pode ser utilizada em repeti&ccedil;&otilde;es para controlar o limite dos &iacute;ndices. Veja o exemplo com tamanho fixo e depois com <code>len</code>:</p>
+            <div class="code-block"><span class="code-label">Listagem 6.12 &mdash; Repeti&ccedil;&atilde;o com tamanho fixo da lista</span>L = [1, 2, 3]
+x = 0
+<span class="keyword">while</span> x &lt; 3:
+    <span class="function">print</span>(L[x])
+    x += 1</div>
+            <div class="code-block"><span class="code-label">Listagem 6.13 &mdash; Repeti&ccedil;&atilde;o com tamanho da lista usando len</span>L = [1, 2, 3]
+x = 0
+<span class="keyword">while</span> x &lt; <span class="function">len</span>(L):
+    <span class="function">print</span>(L[x])
+    x += 1</div>
+            <div class="highlight-box">
+                <p>&#x1F4A1; A vantagem de usar <code>len(L)</code> &eacute; que se trocarmos <code>L</code> por uma lista maior ou menor, o resto do programa continua funcionando sem altera&ccedil;&otilde;es. O valor retornado por <code>len</code> n&atilde;o pode ser usado como &iacute;ndice, mas &eacute; perfeito para testar os limites da lista.</p>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x270F; Exerc&iacute;cios</h2>
+            <div class="exercise-box">
+                <h3>Exerc&iacute;cio 6.1</h3>
+                <p>Modifique o programa da Listagem 6.6 para ler 7 notas em vez de 5.</p>
+            </div>
+        </div>
+
+        <div class="nav-footer">
+            <a href="cap5-04-aninhadas.html" class="nav-link">&#x2B05; Anterior: Cap. 5 &mdash; Repeti&ccedil;&otilde;es Aninhadas</a>
+            <a href="cap6-02-listas-modificacao.html" class="nav-link">Pr&oacute;xima: Adi&ccedil;&atilde;o e Remo&ccedil;&atilde;o &#x27A1;</a>
+        </div>
+    </div>
+    <script src="slide-mode.js"></script>
+</body>
+</html>
