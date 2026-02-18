@@ -234,10 +234,11 @@
         }
 
         .progress-circular {
+            --prog: 0%;
             width: 120px;
             height: 120px;
             border-radius: 50%;
-            background: conic-gradient(var(--primary) 42%, #e2e8f0 0);
+            background: conic-gradient(var(--primary) var(--prog), #e2e8f0 0);
             margin: 0 auto;
             display: flex;
             align-items: center;
@@ -245,8 +246,7 @@
             position: relative;
         }
 
-        .progress-circular::before {
-            content: '42%';
+        .prog-text {
             position: absolute;
             background: white;
             width: 100px;
@@ -259,6 +259,26 @@
             font-weight: bold;
             color: var(--primary);
         }
+
+        .chapter-check-list { list-style: none; }
+        .chapter-check-list li { margin-bottom: 6px; }
+        .chapter-check-list label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 4px 6px;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+        .chapter-check-list label:hover { background: #f0f4f8; }
+        .chapter-check-list input[type="checkbox"] {
+            width: 16px; height: 16px;
+            accent-color: var(--primary);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .chapter-check-list .ch-name { font-size: 0.92em; }
 
         /* --- CARDS DE AULA --- */
         .bimestre-title {
@@ -420,8 +440,10 @@
             <div class="dashboard-grid">
                 <div class="dash-card">
                     <h3>&#x1F4C8; Progresso do Curso</h3>
-                    <div class="progress-circular"></div>
-                    <p style="text-align:center; margin-top:12px; color:#718096; font-size:0.9em;">Cap&iacute;tulos 1-5 de ~12</p>
+                    <div class="progress-circular" id="progressCircle">
+                        <span class="prog-text" id="progText">0%</span>
+                    </div>
+                    <p style="text-align:center; margin-top:12px; color:#718096; font-size:0.9em;" id="progLabel">0 de 12 cap&iacute;tulos</p>
                 </div>
 
                 <div class="dash-card">
@@ -437,13 +459,19 @@
 
                 <div class="dash-card">
                     <h3>&#x1F4C5; Status dos Cap&iacute;tulos</h3>
-                    <ul style="list-style: none; line-height: 2;">
-                        <li><strong>Cap 1 &mdash; Motiva&ccedil;&atilde;o</strong><br>&#x2705; Publicado</li>
-                        <li><strong>Cap 2 &mdash; Preparando o Ambiente</strong><br>&#x2705; Publicado</li>
-                        <li><strong>Cap 3 &mdash; Vari&aacute;veis e Entrada</strong><br>&#x2705; Publicado</li>
-                        <li><strong>Cap 4 &mdash; Condi&ccedil;&otilde;es</strong><br>&#x2705; Publicado</li>
-                        <li><strong>Cap 5 &mdash; Repeti&ccedil;&otilde;es</strong><br>&#x2705; Publicado</li>
-                        <li><strong>Cap 6+ &mdash; Avan&ccedil;ado</strong><br>&#x1F512; Futuro</li>
+                    <ul class="chapter-check-list" id="chapterList">
+                        <li><label><input type="checkbox" class="chapter-check" id="ch1"><span class="ch-name">Cap 1 &mdash; Motiva&ccedil;&atilde;o</span></label></li>
+                        <li><label><input type="checkbox" class="chapter-check" id="ch2"><span class="ch-name">Cap 2 &mdash; Preparando o Ambiente</span></label></li>
+                        <li><label><input type="checkbox" class="chapter-check" id="ch3"><span class="ch-name">Cap 3 &mdash; Vari&aacute;veis e Entrada</span></label></li>
+                        <li><label><input type="checkbox" class="chapter-check" id="ch4"><span class="ch-name">Cap 4 &mdash; Condi&ccedil;&otilde;es</span></label></li>
+                        <li><label><input type="checkbox" class="chapter-check" id="ch5"><span class="ch-name">Cap 5 &mdash; Repeti&ccedil;&otilde;es</span></label></li>
+                        <li><label><input type="checkbox" class="chapter-check" id="ch6"><span class="ch-name">Cap 6 &mdash; Listas</span></label></li>
+                        <li><label><input type="checkbox" class="chapter-check" id="ch7"><span class="ch-name">Cap 7 &mdash; Fun&ccedil;&otilde;es</span></label></li>
+                        <li><label><input type="checkbox" class="chapter-check" id="ch8"><span class="ch-name">Cap 8 &mdash; Strings</span></label></li>
+                        <li><label><input type="checkbox" class="chapter-check" id="ch9"><span class="ch-name">Cap 9 &mdash; Arquivos</span></label></li>
+                        <li><label><input type="checkbox" class="chapter-check" id="ch10"><span class="ch-name">Cap 10 &mdash; Dicion&aacute;rios</span></label></li>
+                        <li><label><input type="checkbox" class="chapter-check" id="ch11"><span class="ch-name">Cap 11 &mdash; Classes</span></label></li>
+                        <li><label><input type="checkbox" class="chapter-check" id="ch12"><span class="ch-name">Cap 12 &mdash; Projeto Final</span></label></li>
                     </ul>
                 </div>
             </div>
@@ -808,6 +836,32 @@
     </div>
 
     <script>
+        // PROGRESSO
+        function updateProgress() {
+            const boxes = document.querySelectorAll('.chapter-check');
+            const total = boxes.length;
+            const checked = Array.from(boxes).filter(cb => cb.checked).length;
+            const pct = Math.round(checked / total * 100);
+
+            document.getElementById('progressCircle').style.setProperty('--prog', pct + '%');
+            document.getElementById('progText').textContent = pct + '%';
+            document.getElementById('progLabel').textContent = checked + ' de ' + total + ' cap\u00edtulos';
+
+            const state = {};
+            boxes.forEach(cb => state[cb.id] = cb.checked);
+            localStorage.setItem('courseProgress', JSON.stringify(state));
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Restaurar estado salvo
+            const saved = JSON.parse(localStorage.getItem('courseProgress') || '{}');
+            document.querySelectorAll('.chapter-check').forEach(cb => {
+                if (cb.id in saved) cb.checked = saved[cb.id];
+                cb.addEventListener('change', updateProgress);
+            });
+            updateProgress();
+        });
+
         // ABAS
         document.addEventListener('DOMContentLoaded', function() {
             const tabButtons = document.querySelectorAll('.tab-btn');
