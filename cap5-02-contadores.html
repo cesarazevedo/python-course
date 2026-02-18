@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aula 5.2 - Contadores</title>
+    <link rel="stylesheet" href="slide-mode.css">
+    <style>
+        :root { --primary: #306998; --secondary: #FFD43B; --bg-light: #f4f7fe; --text-dark: #2d3748; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-light); color: var(--text-dark); line-height: 1.7; }
+        .top-bar { background: white; padding: 15px 30px; display: flex; align-items: center; gap: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 10; }
+        .back-btn { text-decoration: none; color: var(--primary); font-weight: 600; display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; transition: background 0.3s; }
+        .back-btn:hover { background: rgba(48,105,152,0.08); }
+        .page-badge { font-size: 0.8em; padding: 4px 12px; border-radius: 20px; background: rgba(249,115,22,0.12); color: #ea580c; font-weight: 600; }
+        .content-wrapper { max-width: 800px; margin: 40px auto; padding: 0 30px; }
+        .lesson-hero { background: white; border-radius: 16px; padding: 40px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        .lesson-hero h1 { font-size: 2em; margin-bottom: 10px; color: var(--primary); }
+        .lesson-hero .subtitle { font-size: 1.1em; color: #718096; }
+        .content-card { background: white; border-radius: 16px; padding: 35px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 25px; }
+        .content-card h2 { font-size: 1.4em; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .content-card p { margin-bottom: 15px; text-align: justify; }
+        .highlight-box { background: linear-gradient(135deg, rgba(48,105,152,0.05), rgba(255,212,59,0.1)); border-left: 4px solid var(--secondary); padding: 20px 25px; border-radius: 0 12px 12px 0; margin: 20px 0; }
+        .highlight-box p { margin-bottom: 0; font-style: italic; }
+        .code-block { background: #1e293b; color: #e2e8f0; padding: 20px 25px; border-radius: 12px; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.95em; margin: 15px 0; overflow-x: auto; position: relative; white-space: pre; }
+        .code-block .code-label { position: absolute; top: 8px; right: 12px; font-size: 0.75em; color: #64748b; font-family: 'Segoe UI', sans-serif; }
+        .code-block .keyword { color: #c084fc; }
+        .code-block .function { color: #93c5fd; }
+        .code-block .string { color: #86efac; }
+        .code-block .comment { color: #64748b; font-style: italic; }
+        .code-block .output { color: #fbbf24; }
+        .exercise-box { background: #f0fdf4; border: 2px solid #bbf7d0; border-radius: 12px; padding: 25px; margin: 20px 0; }
+        .exercise-box h3 { color: #166534; margin-bottom: 12px; font-size: 1.1em; }
+        .exercise-box p { margin-bottom: 8px; }
+        .nav-footer { display: flex; justify-content: space-between; margin-top: 40px; padding-bottom: 40px; }
+        .nav-link { text-decoration: none; color: var(--primary); font-weight: 600; padding: 12px 24px; border-radius: 10px; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: all 0.3s; }
+        .nav-link:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        ul, ol { margin: 10px 0 15px 25px; } li { margin-bottom: 8px; }
+        @media (max-width: 768px) { .content-wrapper { padding: 0 15px; } .lesson-hero, .content-card { padding: 25px; } .lesson-hero h1 { font-size: 1.5em; } }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <a href="index.html" class="back-btn">&#x2B05; Voltar ao Dashboard</a>
+        <span class="page-badge">Cap&iacute;tulo 5 &mdash; Repeti&ccedil;&otilde;es</span>
+        <button class="slide-toggle" id="slideToggleBtn">&#x1F4FA; Modo Slide</button>
+    </div>
+    <div class="content-wrapper">
+        <div class="lesson-hero">
+            <h1>&#x1F522; Contadores</h1>
+            <p class="subtitle">Se&ccedil;&atilde;o 5.1 &mdash; Contando ocorr&ecirc;ncias com while</p>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x1F4CA; N&uacute;meros pares com if dentro do while</h2>
+            <p>O poder das repeti&ccedil;&otilde;es &eacute; muito mais interessante quando combinamos <code>while</code> com <code>if</code>. Imagine imprimir apenas os n&uacute;meros pares entre 0 e um valor digitado. Podemos usar o operador <code>%</code> (resto da divis&atilde;o) para verificar se um n&uacute;mero &eacute; par:</p>
+            <div class="code-block"><span class="code-label">Listagem 5.7 &mdash; Pares com if</span>fim = <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Digite o &uacute;ltimo n&uacute;mero a imprimir: "</span>))
+x = 0
+<span class="keyword">while</span> x &lt;= fim:
+    <span class="keyword">if</span> x % 2 == 0:
+        <span class="function">print</span>(x)
+    x = x + 1</div>
+            <p>Note que o <code>if</code> dentro do bloco do <code>while</code> precisa de recuo adicional. O <code>x = x + 1</code> &eacute; executado em toda repeti&ccedil;&atilde;o, independentemente do <code>if</code>.</p>
+            <p>Uma solu&ccedil;&atilde;o mais simples: em vez de verificar se &eacute; par, j&aacute; avan&ccedil;ar de 2 em 2:</p>
+            <div class="code-block"><span class="code-label">Listagem 5.8 &mdash; Pares sem if</span>fim = <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Digite o &uacute;ltimo n&uacute;mero a imprimir: "</span>))
+x = 0
+<span class="keyword">while</span> x &lt;= fim:
+    <span class="function">print</span>(x)
+    x = x + 2</div>
+            <p>Isso mostra que existe mais de uma solu&ccedil;&atilde;o para o mesmo problema. Podemos escrever programas diferentes e obter a mesma sa&iacute;da.</p>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x2716; Tabuada simples</h2>
+            <p>Veja um programa que imprime a tabuada de um n&uacute;mero digitado pelo usu&aacute;rio:</p>
+            <div class="code-block"><span class="code-label">Listagem 5.9 &mdash; Tabuada simples</span>n = <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Tabuada de: "</span>))
+x = 1
+<span class="keyword">while</span> x &lt;= 10:
+    <span class="function">print</span>(n * x)
+    x = x + 1</div>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x2753; Contagem de quest&otilde;es corretas</h2>
+            <p>Contadores tamb&eacute;m s&atilde;o &uacute;teis dentro de condi&ccedil;&otilde;es. Vejamos um programa que corrige um teste de m&uacute;ltipla escolha com 3 quest&otilde;es. A resposta da quest&atilde;o 1 &eacute; <code>"b"</code>, da 2 &eacute; <code>"a"</code> e da 3 &eacute; <code>"d"</code>:</p>
+            <div class="code-block"><span class="code-label">Listagem 5.10 &mdash; Contagem de quest&otilde;es corretas</span>pontos = 0
+quest&atilde;o = 1
+<span class="keyword">while</span> quest&atilde;o &lt;= 3:
+    resposta = <span class="function">input</span>(<span class="string">"Resposta da quest&atilde;o %d: "</span> % quest&atilde;o)
+    <span class="keyword">if</span> quest&atilde;o == 1 <span class="keyword">and</span> resposta == <span class="string">"b"</span>:
+        pontos = pontos + 1
+    <span class="keyword">if</span> quest&atilde;o == 2 <span class="keyword">and</span> resposta == <span class="string">"a"</span>:
+        pontos = pontos + 1
+    <span class="keyword">if</span> quest&atilde;o == 3 <span class="keyword">and</span> resposta == <span class="string">"d"</span>:
+        pontos = pontos + 1
+    quest&atilde;o += 1
+<span class="function">print</span>(<span class="string">"O aluno fez %d ponto(s)"</span> % pontos)</div>
+            <div class="highlight-box">
+                <p>&#x1F4A1; O operador <code>+=</code> &eacute; uma abreviatura: <code>questão += 1</code> &eacute; o mesmo que <code>questão = questão + 1</code>. Em Python, letras min&uacute;sculas e mai&uacute;sculas s&atilde;o diferentes: <code>"b"</code> &ne; <code>"B"</code>. Por isso, o programa n&atilde;o aceita respostas em mai&uacute;sculas.</p>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x270F; Exerc&iacute;cios</h2>
+
+            <div class="exercise-box">
+                <h3>Exerc&iacute;cio 5.4</h3>
+                <p>Modifique a Listagem 5.8 para imprimir de 1 at&eacute; o n&uacute;mero digitado pelo usu&aacute;rio, mas, dessa vez, apenas os n&uacute;meros <strong>&iacute;mpares</strong>.</p>
+            </div>
+
+            <div class="exercise-box">
+                <h3>Exerc&iacute;cio 5.5</h3>
+                <p>Reescreva o programa anterior para escrever os 10 primeiros m&uacute;ltiplos de 3.</p>
+            </div>
+
+            <div class="exercise-box">
+                <h3>Exerc&iacute;cio 5.6</h3>
+                <p>Altere a Listagem 5.9 para exibir os resultados no mesmo formato de uma tabuada: <code>2x1 = 2</code>, <code>2x2 = 4</code>, ...</p>
+            </div>
+
+            <div class="exercise-box">
+                <h3>Exerc&iacute;cio 5.7</h3>
+                <p>Modifique a Listagem 5.9 de forma que o usu&aacute;rio tamb&eacute;m digite o in&iacute;cio e o fim da tabuada, em vez de come&ccedil;ar com 1 e terminar com 10.</p>
+            </div>
+
+            <div class="exercise-box">
+                <h3>Exerc&iacute;cio 5.8</h3>
+                <p>Escreva um programa que leia dois n&uacute;meros. Imprima o resultado da <strong>multiplica&ccedil;&atilde;o</strong> do primeiro pelo segundo. Utilize apenas os operadores de <strong>soma e subtra&ccedil;&atilde;o</strong> para calcular o resultado. (Dica: multiplica&ccedil;&atilde;o &eacute; uma soma repetida.)</p>
+            </div>
+
+            <div class="exercise-box">
+                <h3>Exerc&iacute;cio 5.9</h3>
+                <p>Escreva um programa que leia dois n&uacute;meros. Imprima a <strong>divis&atilde;o inteira</strong> do primeiro pelo segundo, assim como o <strong>resto</strong> da divis&atilde;o. Utilize apenas os operadores de soma e subtra&ccedil;&atilde;o para calcular o resultado. (Dica: a divis&atilde;o inteira &eacute; quantas vezes subtraimos o divisor do dividendo at&eacute; ficar menor que ele.)</p>
+            </div>
+
+            <div class="exercise-box">
+                <h3>Exerc&iacute;cio 5.10</h3>
+                <p>Modifique o programa da Listagem 5.10 para que aceite respostas com letras mai&uacute;sculas e min&uacute;sculas em todas as quest&otilde;es. (Dica: use o operador <code>or</code>.)</p>
+            </div>
+        </div>
+
+        <div class="nav-footer">
+            <a href="cap5-01-while.html" class="nav-link">&#x2B05; Anterior: while</a>
+            <a href="cap5-03-acumuladores.html" class="nav-link">Pr&oacute;xima: Acumuladores &#x27A1;</a>
+        </div>
+    </div>
+    <script src="slide-mode.js"></script>
+</body>
+</html>

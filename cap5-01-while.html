@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aula 5.1 - A Estrutura while</title>
+    <link rel="stylesheet" href="slide-mode.css">
+    <style>
+        :root { --primary: #306998; --secondary: #FFD43B; --bg-light: #f4f7fe; --text-dark: #2d3748; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-light); color: var(--text-dark); line-height: 1.7; }
+        .top-bar { background: white; padding: 15px 30px; display: flex; align-items: center; gap: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 10; }
+        .back-btn { text-decoration: none; color: var(--primary); font-weight: 600; display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; transition: background 0.3s; }
+        .back-btn:hover { background: rgba(48,105,152,0.08); }
+        .page-badge { font-size: 0.8em; padding: 4px 12px; border-radius: 20px; background: rgba(249,115,22,0.12); color: #ea580c; font-weight: 600; }
+        .content-wrapper { max-width: 800px; margin: 40px auto; padding: 0 30px; }
+        .lesson-hero { background: white; border-radius: 16px; padding: 40px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        .lesson-hero h1 { font-size: 2em; margin-bottom: 10px; color: var(--primary); }
+        .lesson-hero .subtitle { font-size: 1.1em; color: #718096; }
+        .content-card { background: white; border-radius: 16px; padding: 35px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 25px; }
+        .content-card h2 { font-size: 1.4em; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .content-card p { margin-bottom: 15px; text-align: justify; }
+        .highlight-box { background: linear-gradient(135deg, rgba(48,105,152,0.05), rgba(255,212,59,0.1)); border-left: 4px solid var(--secondary); padding: 20px 25px; border-radius: 0 12px 12px 0; margin: 20px 0; }
+        .highlight-box p { margin-bottom: 0; font-style: italic; }
+        .code-block { background: #1e293b; color: #e2e8f0; padding: 20px 25px; border-radius: 12px; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.95em; margin: 15px 0; overflow-x: auto; position: relative; white-space: pre; }
+        .code-block .code-label { position: absolute; top: 8px; right: 12px; font-size: 0.75em; color: #64748b; font-family: 'Segoe UI', sans-serif; }
+        .code-block .keyword { color: #c084fc; }
+        .code-block .function { color: #93c5fd; }
+        .code-block .string { color: #86efac; }
+        .code-block .comment { color: #64748b; font-style: italic; }
+        .code-block .output { color: #fbbf24; }
+        .code-block .placeholder { color: #fb923c; font-style: italic; }
+        .exercise-box { background: #f0fdf4; border: 2px solid #bbf7d0; border-radius: 12px; padding: 25px; margin: 20px 0; }
+        .exercise-box h3 { color: #166534; margin-bottom: 12px; font-size: 1.1em; }
+        .exercise-box p { margin-bottom: 8px; }
+        .nav-footer { display: flex; justify-content: space-between; margin-top: 40px; padding-bottom: 40px; }
+        .nav-link { text-decoration: none; color: var(--primary); font-weight: 600; padding: 12px 24px; border-radius: 10px; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: all 0.3s; }
+        .nav-link:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        ul, ol { margin: 10px 0 15px 25px; } li { margin-bottom: 8px; }
+        @media (max-width: 768px) { .content-wrapper { padding: 0 15px; } .lesson-hero, .content-card { padding: 25px; } .lesson-hero h1 { font-size: 1.5em; } }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <a href="index.html" class="back-btn">&#x2B05; Voltar ao Dashboard</a>
+        <span class="page-badge">Cap&iacute;tulo 5 &mdash; Repeti&ccedil;&otilde;es</span>
+        <button class="slide-toggle" id="slideToggleBtn">&#x1F4FA; Modo Slide</button>
+    </div>
+    <div class="content-wrapper">
+        <div class="lesson-hero">
+            <h1>&#x1F501; A Estrutura while</h1>
+            <p class="subtitle">Se&ccedil;&atilde;o 5.1 &mdash; Repeti&ccedil;&otilde;es e o la&ccedil;o while</p>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x1F914; O problema das repeti&ccedil;&otilde;es</h2>
+            <p>Repeti&ccedil;&otilde;es representam a base de v&aacute;rios programas. S&atilde;o utilizadas para executar a mesma parte de um programa v&aacute;rias vezes, normalmente dependendo de uma condi&ccedil;&atilde;o. Por exemplo, para imprimir os n&uacute;meros de 1 a 3, poder&iacute;amos escrever:</p>
+            <div class="code-block"><span class="code-label">Listagem 5.1 &mdash; Imprimindo de 1 a 3</span><span class="function">print</span>(1)
+<span class="function">print</span>(2)
+<span class="function">print</span>(3)</div>
+            <p>Mas se quisermos usar uma vari&aacute;vel <code>x</code> e variar seu valor, poder&iacute;amos fazer:</p>
+            <div class="code-block"><span class="code-label">Listagem 5.2 &mdash; Usando vari&aacute;vel</span>x = 1
+<span class="function">print</span>(x)
+x = 2
+<span class="function">print</span>(x)
+x = 3
+<span class="function">print</span>(x)</div>
+            <p>Ainda melhor: <strong>incrementar</strong> x a cada passo, em vez de reatribuir:</p>
+            <div class="code-block"><span class="code-label">Listagem 5.3 &mdash; Incrementando x</span>x = 1
+<span class="function">print</span>(x)
+x = x + 1
+<span class="function">print</span>(x)
+x = x + 1
+<span class="function">print</span>(x)</div>
+            <p>Por&eacute;m, se o objetivo fosse escrever 100 n&uacute;meros, ter&iacute;amos que escrever pelo menos 200 linhas! A estrutura de repeti&ccedil;&atilde;o <code>while</code> resolve esse problema.</p>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x1F504; A estrutura while</h2>
+            <p>O <code>while</code> repete um bloco de c&oacute;digo <strong>enquanto a condi&ccedil;&atilde;o for verdadeira</strong>. Seu formato &eacute;:</p>
+            <div class="code-block"><span class="code-label">Listagem 5.4 &mdash; Formato do while</span><span class="keyword">while</span> <span class="placeholder">&lt;condi&ccedil;&atilde;o&gt;</span>:
+    <span class="placeholder">bloco</span></div>
+            <p>Para resolver o problema de imprimir de 1 a 3 usando <code>while</code>:</p>
+            <div class="code-block"><span class="code-label">Listagem 5.5 &mdash; Imprimindo de 1 a 3 com while</span>x = 1
+<span class="keyword">while</span> x &lt;= 3:
+    <span class="function">print</span>(x)
+    x = x + 1</div>
+            <p>Execu&ccedil;&atilde;o passo a passo:</p>
+            <ol>
+                <li><code>x = 1</code> — x &eacute; inicializado com 1</li>
+                <li>Condi&ccedil;&atilde;o <code>x &lt;= 3</code>: True &rarr; executa o bloco: imprime 1, x vira 2</li>
+                <li>Condi&ccedil;&atilde;o <code>x &lt;= 3</code>: True &rarr; executa o bloco: imprime 2, x vira 3</li>
+                <li>Condi&ccedil;&atilde;o <code>x &lt;= 3</code>: True &rarr; executa o bloco: imprime 3, x vira 4</li>
+                <li>Condi&ccedil;&atilde;o <code>x &lt;= 3</code>: False &rarr; repeti&ccedil;&atilde;o termina</li>
+            </ol>
+            <div class="highlight-box">
+                <p>&#x1F4A1; A linha <code>x = x + 1</code> &eacute; essencial! Sem ela, a condi&ccedil;&atilde;o nunca se tornaria False e o programa rodaria para sempre &mdash; um <strong>loop infinito</strong>.</p>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x1F522; Imprimindo at&eacute; um n&uacute;mero digitado</h2>
+            <p>A verdadeira vantagem do <code>while</code> &eacute; combinar com entrada do usu&aacute;rio. O <strong>contador</strong> <code>x</code> controla quantas repeti&ccedil;&otilde;es j&aacute; foram feitas:</p>
+            <div class="code-block"><span class="code-label">Listagem 5.6 &mdash; Impress&atilde;o at&eacute; um limite digitado</span>fim = <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Digite o &uacute;ltimo n&uacute;mero a imprimir: "</span>))
+x = 1
+<span class="keyword">while</span> x &lt;= fim:
+    <span class="function">print</span>(x)
+    x = x + 1</div>
+            <p>Um <strong>contador</strong> &eacute; uma vari&aacute;vel utilizada para contar o n&uacute;mero de ocorr&ecirc;ncias de um determinado evento. Aqui, <code>x</code> conta quantas repeti&ccedil;&otilde;es j&aacute; foram executadas. Note que se o usu&aacute;rio digitar 0, a condi&ccedil;&atilde;o <code>1 &lt;= 0</code> &eacute; falsa desde a primeira verifica&ccedil;&atilde;o e nada &eacute; impresso.</p>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x270F; Exerc&iacute;cios</h2>
+
+            <div class="exercise-box">
+                <h3>Exerc&iacute;cio 5.1</h3>
+                <p>Modifique o programa da Listagem 5.5 para exibir os n&uacute;meros de 1 a 100.</p>
+            </div>
+
+            <div class="exercise-box">
+                <h3>Exerc&iacute;cio 5.2</h3>
+                <p>Modifique o programa para exibir os n&uacute;meros de 50 a 100.</p>
+            </div>
+
+            <div class="exercise-box">
+                <h3>Exerc&iacute;cio 5.3</h3>
+                <p>Fa&ccedil;a um programa para escrever a contagem regressiva do lan&ccedil;amento de um foguete. O programa deve imprimir 10, 9, 8, ..., 1, 0 e <strong>Fogo!</strong> na tela.</p>
+            </div>
+        </div>
+
+        <div class="nav-footer">
+            <a href="cap4-04-elif.html" class="nav-link">&#x2B05; Anterior: Cap. 4 &mdash; elif</a>
+            <a href="cap5-02-contadores.html" class="nav-link">Pr&oacute;xima: Contadores &#x27A1;</a>
+        </div>
+    </div>
+    <script src="slide-mode.js"></script>
+</body>
+</html>

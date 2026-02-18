@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aula 5.4 - Repetições Aninhadas</title>
+    <link rel="stylesheet" href="slide-mode.css">
+    <style>
+        :root { --primary: #306998; --secondary: #FFD43B; --bg-light: #f4f7fe; --text-dark: #2d3748; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-light); color: var(--text-dark); line-height: 1.7; }
+        .top-bar { background: white; padding: 15px 30px; display: flex; align-items: center; gap: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 10; }
+        .back-btn { text-decoration: none; color: var(--primary); font-weight: 600; display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; transition: background 0.3s; }
+        .back-btn:hover { background: rgba(48,105,152,0.08); }
+        .page-badge { font-size: 0.8em; padding: 4px 12px; border-radius: 20px; background: rgba(249,115,22,0.12); color: #ea580c; font-weight: 600; }
+        .content-wrapper { max-width: 800px; margin: 40px auto; padding: 0 30px; }
+        .lesson-hero { background: white; border-radius: 16px; padding: 40px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        .lesson-hero h1 { font-size: 2em; margin-bottom: 10px; color: var(--primary); }
+        .lesson-hero .subtitle { font-size: 1.1em; color: #718096; }
+        .content-card { background: white; border-radius: 16px; padding: 35px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 25px; }
+        .content-card h2 { font-size: 1.4em; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .content-card p { margin-bottom: 15px; text-align: justify; }
+        .highlight-box { background: linear-gradient(135deg, rgba(48,105,152,0.05), rgba(255,212,59,0.1)); border-left: 4px solid var(--secondary); padding: 20px 25px; border-radius: 0 12px 12px 0; margin: 20px 0; }
+        .highlight-box p { margin-bottom: 0; font-style: italic; }
+        .code-block { background: #1e293b; color: #e2e8f0; padding: 20px 25px; border-radius: 12px; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.95em; margin: 15px 0; overflow-x: auto; position: relative; white-space: pre; }
+        .code-block .code-label { position: absolute; top: 8px; right: 12px; font-size: 0.75em; color: #64748b; font-family: 'Segoe UI', sans-serif; }
+        .code-block .keyword { color: #c084fc; }
+        .code-block .function { color: #93c5fd; }
+        .code-block .string { color: #86efac; }
+        .code-block .comment { color: #64748b; font-style: italic; }
+        .code-block .output { color: #fbbf24; }
+        .exercise-box { background: #f0fdf4; border: 2px solid #bbf7d0; border-radius: 12px; padding: 25px; margin: 20px 0; }
+        .exercise-box h3 { color: #166534; margin-bottom: 12px; font-size: 1.1em; }
+        .exercise-box p { margin-bottom: 8px; }
+        .op-table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+        .op-table th, .op-table td { padding: 10px 14px; border-bottom: 1px solid #e2e8f0; }
+        .op-table th { background: #f8fafc; color: var(--primary); font-weight: 600; text-align: center; }
+        .op-table td { text-align: center; }
+        .nav-footer { display: flex; justify-content: space-between; margin-top: 40px; padding-bottom: 40px; }
+        .nav-link { text-decoration: none; color: var(--primary); font-weight: 600; padding: 12px 24px; border-radius: 10px; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: all 0.3s; }
+        .nav-link:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        ul, ol { margin: 10px 0 15px 25px; } li { margin-bottom: 8px; }
+        @media (max-width: 768px) { .content-wrapper { padding: 0 15px; } .lesson-hero, .content-card { padding: 25px; } .lesson-hero h1 { font-size: 1.5em; } }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <a href="index.html" class="back-btn">&#x2B05; Voltar ao Dashboard</a>
+        <span class="page-badge">Cap&iacute;tulo 5 &mdash; Repeti&ccedil;&otilde;es</span>
+        <button class="slide-toggle" id="slideToggleBtn">&#x1F4FA; Modo Slide</button>
+    </div>
+    <div class="content-wrapper">
+        <div class="lesson-hero">
+            <h1>&#x1F300; Repeti&ccedil;&otilde;es Aninhadas</h1>
+            <p class="subtitle">Se&ccedil;&atilde;o 5.4 &mdash; break avan&ccedil;ado e while dentro de while</p>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x1F4B5; C&eacute;dulas com break</h2>
+            <p>O <code>break</code> pode ser combinado com <code>if/elif</code> para criar l&oacute;gicas mais complexas. Um exemplo cl&aacute;ssico &eacute; calcular quantas c&eacute;dulas (R$ 50, R$ 20, R$ 10, R$ 5 e R$ 1) s&atilde;o necess&aacute;rias para pagar um determinado valor:</p>
+            <div class="code-block"><span class="code-label">Listagem 5.14 &mdash; Contagem de c&eacute;dulas</span>valor = <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Digite o valor a pagar: "</span>))
+c&eacute;dulas = 0
+atual = 50
+apagar = valor
+<span class="keyword">while</span> <span class="keyword">True</span>:
+    <span class="keyword">if</span> atual &lt;= apagar:
+        apagar -= atual
+        c&eacute;dulas += 1
+    <span class="keyword">else</span>:
+        <span class="function">print</span>(<span class="string">"%d c&eacute;dula(s) de R$%d"</span> % (c&eacute;dulas, atual))
+        <span class="keyword">if</span> apagar == 0:
+            <span class="keyword">break</span>
+        <span class="keyword">if</span> atual == 50:
+            atual = 20
+        <span class="keyword">elif</span> atual == 20:
+            atual = 10
+        <span class="keyword">elif</span> atual == 10:
+            atual = 5
+        <span class="keyword">elif</span> atual == 5:
+            atual = 1
+        c&eacute;dulas = 0</div>
+            <p>O programa subtrai repetidamente o valor da c&eacute;dula atual de <code>apagar</code> contando quantas vezes cabe (<code>cédulas</code>). Quando n&atilde;o cabe mais, imprime a quantidade e passa para a c&eacute;dula menor. O <code>break</code> &eacute; ativado quando n&atilde;o h&aacute; mais nada a pagar (<code>apagar == 0</code>).</p>
+            <div class="highlight-box">
+                <p>&#x1F4A1; Execute o programa com os valores: 501, 745, 384, 2, 7 e 1 para verificar se os resultados est&atilde;o corretos (Exerc&iacute;cio 5.16).</p>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x1F300; 5.4 Repeti&ccedil;&otilde;es Aninhadas</h2>
+            <p>Podemos combinar v&aacute;rios <code>while</code> de forma a obter resultados mais interessantes. Imagine imprimir as tabuadas de multiplica&ccedil;&atilde;o de 1 a 10. Podemos fazer isso com um <code>while</code> dentro de outro:</p>
+            <div class="code-block"><span class="code-label">Listagem 5.15 &mdash; Impress&atilde;o de tabuadas</span>tabuada = 1
+<span class="keyword">while</span> tabuada &lt;= 10:
+    n&uacute;mero = 1
+    <span class="keyword">while</span> n&uacute;mero &lt;= 10:
+        <span class="function">print</span>(<span class="string">"%d x %d = %d"</span> % (tabuada, n&uacute;mero, tabuada * n&uacute;mero))
+        n&uacute;mero += 1
+    tabuada += 1</div>
+            <p>O <code>while</code> externo controla a tabuada (de 1 a 10). O <code>while</code> interno imprime os 10 termos de cada tabuada. Note que <code>número</code> &eacute; reinicializado com 1 a cada nova tabuada &mdash; por isso fica dentro do bloco externo, mas antes do while interno.</p>
+            <p>Vejamos o mesmo problema sem usar repeti&ccedil;&otilde;es aninhadas, com apenas um <code>while</code>:</p>
+            <div class="code-block"><span class="code-label">Listagem 5.16 &mdash; Tabuadas sem repeti&ccedil;&otilde;es aninhadas</span>tabuada = 1
+n&uacute;mero = 1
+<span class="keyword">while</span> tabuada &lt;= 10:
+    <span class="function">print</span>(<span class="string">"%d x %d = %d"</span> % (tabuada, n&uacute;mero, tabuada * n&uacute;mero))
+    n&uacute;mero += 1
+    <span class="keyword">if</span> n&uacute;mero == 11:
+        n&uacute;mero = 1
+        tabuada += 1</div>
+            <p>Quando <code>número</code> chega a 11, ele &eacute; reinicializado para 1 e <code>tabuada</code> avan&ccedil;a. Essa solu&ccedil;&atilde;o usa apenas um la&ccedil;o, mas &eacute; menos intuitiva que a vers&atilde;o aninhada.</p>
+            <div class="highlight-box">
+                <p>&#x1F4A1; Repeti&ccedil;&otilde;es aninhadas s&atilde;o naturais quando o problema tem duas dimens&otilde;es: por exemplo, linhas e colunas de uma tabela. O while interno executa completamente a cada itera&ccedil;&atilde;o do while externo.</p>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2>&#x270F; Exerc&iacute;cios</h2>
+
+            <div class="exercise-box">
+                <h3>Exerc&iacute;cio 5.15</h3>
+                <p>Escreva um programa para controlar uma pequena m&aacute;quina registradora. Solicite ao usu&aacute;rio que digite o c&oacute;digo do produto e a quantidade comprada. Utilize a tabela abaixo para obter o pre&ccedil;o:</p>
+                <table class="op-table">
+                    <thead><tr><th>C&oacute;digo</th><th>Pre&ccedil;o</th></tr></thead>
+                    <tbody>
+                        <tr><td>1</td><td>R$ 0,50</td></tr>
+                        <tr><td>2</td><td>R$ 1,00</td></tr>
+                        <tr><td>3</td><td>R$ 4,00</td></tr>
+                        <tr><td>5</td><td>R$ 7,00</td></tr>
+                        <tr><td>9</td><td>R$ 8,00</td></tr>
+                    </tbody>
+                </table>
+                <p>Exiba o total das compras depois que o usu&aacute;rio digitar 0. Qualquer outro c&oacute;digo deve gerar a mensagem de erro <code>"C&oacute;digo inv&aacute;lido"</code>.</p>
+            </div>
+
+            <div class="exercise-box">
+                <h3>Exerc&iacute;cio 5.16</h3>
+                <p>Execute o programa da Listagem 5.14 para os seguintes valores: 501, 745, 384, 2, 7 e 1. Verifique se os resultados est&atilde;o corretos.</p>
+            </div>
+
+            <div class="exercise-box">
+                <h3>Exerc&iacute;cio 5.17</h3>
+                <p>O que acontece se digitarmos 0 (zero) no valor a pagar do programa da Listagem 5.14?</p>
+            </div>
+
+            <div class="exercise-box">
+                <h3>Exerc&iacute;cio 5.18</h3>
+                <p>Modifique o programa da Listagem 5.14 para tamb&eacute;m trabalhar com notas de R$ 100.</p>
+            </div>
+
+            <div class="exercise-box">
+                <h3>Exerc&iacute;cio 5.19</h3>
+                <p>Modifique o programa para aceitar valores decimais, ou seja, tamb&eacute;m contar moedas de R$ 0,01, R$ 0,02, R$ 0,05, R$ 0,10 e R$ 0,50.</p>
+            </div>
+
+            <div class="exercise-box">
+                <h3>Exerc&iacute;cio 5.20</h3>
+                <p>O que acontece se digitarmos 0,01 no programa anterior? Caso ele n&atilde;o funcione, altere-o de forma a corrigir o problema.</p>
+            </div>
+
+            <div class="exercise-box">
+                <h3>Exerc&iacute;cio 5.21</h3>
+                <p>Reescreva o programa da Listagem 5.14 de forma a continuar executando at&eacute; que o valor digitado seja 0. Utilize repeti&ccedil;&otilde;es aninhadas.</p>
+            </div>
+
+            <div class="exercise-box">
+                <h3>Exerc&iacute;cio 5.22</h3>
+                <p>Escreva um programa que exiba uma lista de op&ccedil;&otilde;es (menu): adi&ccedil;&atilde;o, subtra&ccedil;&atilde;o, divis&atilde;o, multiplica&ccedil;&atilde;o e sair. Imprima a tabuada da opera&ccedil;&atilde;o escolhida. Repita at&eacute; que a op&ccedil;&atilde;o sa&iacute;da seja escolhida.</p>
+            </div>
+
+            <div class="exercise-box">
+                <h3>Exerc&iacute;cio 5.23</h3>
+                <p>Escreva um programa que leia um n&uacute;mero e verifique se &eacute; ou n&atilde;o um n&uacute;mero primo. Para isso, calcule o resto da divis&atilde;o do n&uacute;mero por 2 e depois por todos os n&uacute;meros &iacute;mpares at&eacute; o n&uacute;mero lido. Se o resto de uma dessas divis&otilde;es for igual a zero, o n&uacute;mero n&atilde;o &eacute; primo. Observe que 0 e 1 n&atilde;o s&atilde;o primos e que 2 &eacute; o &uacute;nico n&uacute;mero primo que &eacute; par.</p>
+            </div>
+
+            <div class="exercise-box">
+                <h3>Exerc&iacute;cio 5.24</h3>
+                <p>Modifique o programa anterior de forma a ler um n&uacute;mero <em>n</em>. Imprima os <em>n</em> primeiros n&uacute;meros primos.</p>
+            </div>
+
+            <div class="exercise-box">
+                <h3>Exerc&iacute;cio 5.25</h3>
+                <p>Escreva um programa que calcule a raiz quadrada de um n&uacute;mero usando o m&eacute;todo de Newton. Sendo <em>n</em> o n&uacute;mero, considere a base <em>b</em> = 2. Calcule <em>p</em> usando a f&oacute;rmula <em>p</em> = (<em>b</em> + (<em>n</em> / <em>b</em>)) / 2. A cada passo, fa&ccedil;a <em>b</em> = <em>p</em> e recalcule. Pare quando a diferen&ccedil;a absoluta entre <em>n</em> e o quadrado de <em>p</em> for menor que 0,0001.</p>
+            </div>
+
+            <div class="exercise-box">
+                <h3>Exerc&iacute;cio 5.26</h3>
+                <p>Escreva um programa que calcule o resto da divis&atilde;o inteira entre dois n&uacute;meros. Utilize apenas as opera&ccedil;&otilde;es de soma e subtra&ccedil;&atilde;o para calcular o resultado.</p>
+            </div>
+
+            <div class="exercise-box">
+                <h3>Exerc&iacute;cio 5.27</h3>
+                <p>Escreva um programa que verifique se um n&uacute;mero &eacute; pal&iacute;ndromo. Um n&uacute;mero &eacute; pal&iacute;ndromo se continua o mesmo caso seus d&iacute;gitos sejam invertidos. Exemplos: 454, 10501.</p>
+            </div>
+        </div>
+
+        <div class="nav-footer">
+            <a href="cap5-03-acumuladores.html" class="nav-link">&#x2B05; Anterior: Acumuladores e break</a>
+            <a href="index.html" class="nav-link">Voltar ao Dashboard &#x1F3E0;</a>
+        </div>
+    </div>
+    <script src="slide-mode.js"></script>
+</body>
+</html>

@@ -184,6 +184,15 @@
             color: #7209b7;
         }
 
+        .tab-btn[data-target="cap5"].active::after {
+            background: #ea580c;
+        }
+
+        .badge-cap5 {
+            background: rgba(249, 115, 22, 0.12);
+            color: #ea580c;
+        }
+
         /* CONTEÚDO DAS ABAS */
         .tab-content {
             flex: 1;
@@ -228,7 +237,7 @@
             width: 120px;
             height: 120px;
             border-radius: 50%;
-            background: conic-gradient(var(--primary) 25%, #e2e8f0 0);
+            background: conic-gradient(var(--primary) 42%, #e2e8f0 0);
             margin: 0 auto;
             display: flex;
             align-items: center;
@@ -237,7 +246,7 @@
         }
 
         .progress-circular::before {
-            content: '25%';
+            content: '42%';
             position: absolute;
             background: white;
             width: 100px;
@@ -403,6 +412,7 @@
             <button class="tab-btn" data-target="cap2">&#x2699; Cap 2 &mdash; Preparando o Ambiente</button>
             <button class="tab-btn" data-target="cap3">&#x1F4CA; Cap 3 &mdash; Vari&aacute;veis e Entrada</button>
             <button class="tab-btn" data-target="cap4">&#x2753; Cap 4 &mdash; Condi&ccedil;&otilde;es</button>
+            <button class="tab-btn" data-target="cap5">&#x1F501; Cap 5 &mdash; Repeti&ccedil;&otilde;es</button>
         </div>
 
         <!-- VISÃO GERAL -->
@@ -411,7 +421,7 @@
                 <div class="dash-card">
                     <h3>&#x1F4C8; Progresso do Curso</h3>
                     <div class="progress-circular"></div>
-                    <p style="text-align:center; margin-top:12px; color:#718096; font-size:0.9em;">Cap&iacute;tulos 1-4 de ~12</p>
+                    <p style="text-align:center; margin-top:12px; color:#718096; font-size:0.9em;">Cap&iacute;tulos 1-5 de ~12</p>
                 </div>
 
                 <div class="dash-card">
@@ -432,7 +442,7 @@
                         <li><strong>Cap 2 &mdash; Preparando o Ambiente</strong><br>&#x2705; Publicado</li>
                         <li><strong>Cap 3 &mdash; Vari&aacute;veis e Entrada</strong><br>&#x2705; Publicado</li>
                         <li><strong>Cap 4 &mdash; Condi&ccedil;&otilde;es</strong><br>&#x2705; Publicado</li>
-                        <li><strong>Cap 5 &mdash; Repeti&ccedil;&otilde;es</strong><br>&#x1F512; Futuro</li>
+                        <li><strong>Cap 5 &mdash; Repeti&ccedil;&otilde;es</strong><br>&#x2705; Publicado</li>
                         <li><strong>Cap 6+ &mdash; Avan&ccedil;ado</strong><br>&#x1F512; Futuro</li>
                     </ul>
                 </div>
@@ -656,6 +666,67 @@
                     <div class="lesson-tags">
                         <span class="mini-tag">elif</span>
                         <span class="mini-tag">M&uacute;ltiplas condi&ccedil;&otilde;es</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- CAPÍTULO 5 — REPETIÇÕES -->
+        <div id="cap5" class="tab-content">
+            <div class="bimestre-title">
+                Repeti&ccedil;&otilde;es <span class="bimestre-badge badge-cap5">Cap&iacute;tulo 5</span>
+            </div>
+
+            <div class="lessons-grid">
+                <a href="cap5-01-while.html" class="lesson-card done">
+                    <div class="lesson-header">
+                        <span class="lesson-id">#01&#x1F501;</span>
+                        <span class="lesson-status">&#x2705;</span>
+                    </div>
+                    <h4 class="lesson-title">A Estrutura while</h4>
+                    <p class="lesson-desc">Repita blocos de c&oacute;digo enquanto uma condi&ccedil;&atilde;o for verdadeira. Aprenda contadores, la&ccedil;os e como evitar loops infinitos.</p>
+                    <div class="lesson-tags">
+                        <span class="mini-tag">while</span>
+                        <span class="mini-tag">Contador</span>
+                    </div>
+                </a>
+
+                <a href="cap5-02-contadores.html" class="lesson-card done">
+                    <div class="lesson-header">
+                        <span class="lesson-id">#02&#x1F522;</span>
+                        <span class="lesson-status">&#x2705;</span>
+                    </div>
+                    <h4 class="lesson-title">Contadores</h4>
+                    <p class="lesson-desc">Combine while com if para contar ocorr&ecirc;ncias. Veja exemplos com n&uacute;meros pares, tabuada e corre&ccedil;&atilde;o de questões.</p>
+                    <div class="lesson-tags">
+                        <span class="mini-tag">Contadores</span>
+                        <span class="mini-tag">if + while</span>
+                    </div>
+                </a>
+
+                <a href="cap5-03-acumuladores.html" class="lesson-card done">
+                    <div class="lesson-header">
+                        <span class="lesson-id">#03&#x2795;</span>
+                        <span class="lesson-status">&#x2705;</span>
+                    </div>
+                    <h4 class="lesson-title">Acumuladores e break</h4>
+                    <p class="lesson-desc">Some valores vari&aacute;veis com acumuladores. Use break para interromper repeti&ccedil;&otilde;es a partir de dentro do bloco.</p>
+                    <div class="lesson-tags">
+                        <span class="mini-tag">Acumuladores</span>
+                        <span class="mini-tag">break</span>
+                    </div>
+                </a>
+
+                <a href="cap5-04-aninhadas.html" class="lesson-card done">
+                    <div class="lesson-header">
+                        <span class="lesson-id">#04&#x1F300;</span>
+                        <span class="lesson-status">&#x2705;</span>
+                    </div>
+                    <h4 class="lesson-title">Repeti&ccedil;&otilde;es Aninhadas</h4>
+                    <p class="lesson-desc">Coloque um while dentro de outro para problemas de duas dimens&otilde;es. Veja o exemplo completo das tabuadas e c&eacute;dulas.</p>
+                    <div class="lesson-tags">
+                        <span class="mini-tag">Aninhadas</span>
+                        <span class="mini-tag">Tabuadas</span>
                     </div>
                 </a>
             </div>
