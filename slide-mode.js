@@ -101,6 +101,14 @@
         }
     }
 
+    // Navegação entre páginas com setas (fora do modo slide)
+    document.addEventListener('keydown', function(e) {
+        if (document.body.classList.contains('slide-active')) return;
+        const links = document.querySelectorAll('.nav-link');
+        if (e.key === 'ArrowLeft'  && links[0]) links[0].click();
+        if (e.key === 'ArrowRight' && links[1]) links[1].click();
+    });
+
     // Initialize when DOM is ready
     document.addEventListener('DOMContentLoaded', function() {
         initSlideMode();
